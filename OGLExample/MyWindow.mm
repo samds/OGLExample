@@ -30,7 +30,7 @@
 
 - (void)awakeFromNib
 {
-    NSLog(@"%s",__FUNCTION__);
+//    NSLog(@"%s",__FUNCTION__);
     [self.openGLView setViewDelegate:self];
     
     // NSTableViewRowSizeStyleDefault should be used, unless the user has picked
