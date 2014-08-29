@@ -57,7 +57,10 @@
                                 defer:flag];
     if (self) {
         _topLevelItems = @[@"Basic",@"Texture"];
-        _dataSource = @[BASIC_CLEAR_COLOR,BASIC_TRIANGLE,BASIC_COLORED_TRIANGLE,BASIC_SCISSOR];
+        _dataSource = @[BASIC_CLEAR_COLOR,
+                        BASIC_TRIANGLE,
+                        BASIC_COLORED_TRIANGLE,
+                        BASIC_SCISSOR];
         
         _openGLForm = new OGLExampleColor();
     }
@@ -95,7 +98,8 @@
 
 #pragma mark - NSOutlineViewDataSource
 
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+- (NSInteger)outlineView:(NSOutlineView *)outlineView
+  numberOfChildrenOfItem:(id)item
 {
     if (item==nil) {
         return [_topLevelItems count];
@@ -119,7 +123,9 @@
     return children;
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
+- (id)outlineView:(NSOutlineView *)outlineView
+            child:(NSInteger)index
+           ofItem:(id)item
 {
     return [[self _childrenForItem:item] objectAtIndex:index];
 }
@@ -133,26 +139,36 @@
     }
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+- (id)              outlineView:(NSOutlineView *)outlineView
+      objectValueForTableColumn:(NSTableColumn *)tableColumn
+                         byItem:(id)item
 {
     return item;
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item
+- (id)              outlineView:(NSOutlineView *)outlineView
+             viewForTableColumn:(NSTableColumn *)tableColumn
+                           item:(id)item
 {
     if ([_topLevelItems containsObject:item])
     {
-        NSAssert([item isKindOfClass:[NSString class]], @"item must be a NSString");
+        NSAssert([item isKindOfClass:[NSString class]],
+                 @"item must be a NSString"
+                 );
         
-        NSTableCellView *cell = [outlineView makeViewWithIdentifier:@"HeaderCell" owner:self];
+        NSTableCellView *cell =
+                [outlineView makeViewWithIdentifier:@"HeaderCell" owner:self];
         [cell.textField setStringValue:[item uppercaseString]];
         return cell;
     }
     else
     {
-        NSAssert([item isKindOfClass:[NSString class]], @"item must be a NSString");
+        NSAssert([item isKindOfClass:[NSString class]],
+                 @"item must be a NSString"
+                 );
         
-        NSTableCellView *cell = [outlineView makeViewWithIdentifier:@"DataCell" owner:self];
+        NSTableCellView *cell = [outlineView makeViewWithIdentifier:@"DataCell"
+                                                              owner:self];
         [cell.textField setStringValue:item];
         return cell;
     }
@@ -163,13 +179,15 @@
     return [_topLevelItems containsObject:item];
 }
 
-- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview {
+- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview
+{
     return NO;
 }
 
 #pragma mark - NSOutlineViewDelegate
 
-- (NSIndexSet *)outlineView:(NSOutlineView *)outlineView selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes
+- (NSIndexSet *)outlineView:(NSOutlineView *)outlineView
+    selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes
 {
 //    NSLog(@"==> %@",[proposedSelectionIndexes debugDescription]);
 
@@ -212,9 +230,11 @@
     // During the initialization of our shape we don't want any rendering.
     // By example, if we try to compile a shader during rendering
     // we get a GL_INVALID_OPERATION .
-	CGLLockContext((CGLContextObj)[[self.openGLView openGLContext] CGLContextObj]);
+	CGLLockContext((CGLContextObj)[[_openGLView openGLContext] CGLContextObj]);
     _openGLForm->init(NULL);
-	CGLUnlockContext((CGLContextObj)[[self.openGLView openGLContext] CGLContextObj]);
+	CGLUnlockContext(
+                     (CGLContextObj)[[_openGLView openGLContext] CGLContextObj]
+                     );
 
     return proposedSelectionIndexes;
 }
