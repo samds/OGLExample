@@ -18,6 +18,12 @@
 		7E2CFDA919B0C87B00B874B4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFD8819B0C87B00B874B4 /* Cocoa.framework */; };
 		7E2CFDB119B0C87B00B874B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDAF19B0C87B00B874B4 /* InfoPlist.strings */; };
 		7E2CFDB319B0C87B00B874B4 /* OGLExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFDB219B0C87B00B874B4 /* OGLExampleTests.m */; };
+		7E2CFDBE19B0C8A500B874B4 /* OGLExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFDBC19B0C8A500B874B4 /* OGLExample.cpp */; };
+		7E2CFDC119B0C8B400B874B4 /* MyWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC019B0C8B400B874B4 /* MyWindow.mm */; };
+		7E2CFDC319B0C91200B874B4 /* OGLUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDC219B0C91200B874B4 /* OGLUIKit.framework */; };
+		7E2CFDC619B0C94B00B874B4 /* RedTriangle.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */; };
+		7E2CFDC719B0C94B00B874B4 /* RedTriangle.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */; };
+		7E2CFDCD19B0CB2100B874B4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +56,15 @@
 		7E2CFDAE19B0C87B00B874B4 /* OGLExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OGLExampleTests-Info.plist"; sourceTree = "<group>"; };
 		7E2CFDB019B0C87B00B874B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7E2CFDB219B0C87B00B874B4 /* OGLExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OGLExampleTests.m; sourceTree = "<group>"; };
+		7E2CFDBC19B0C8A500B874B4 /* OGLExample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OGLExample.cpp; sourceTree = "<group>"; };
+		7E2CFDBD19B0C8A500B874B4 /* OGLExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGLExample.h; sourceTree = "<group>"; };
+		7E2CFDBF19B0C8B400B874B4 /* MyWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWindow.h; sourceTree = "<group>"; };
+		7E2CFDC019B0C8B400B874B4 /* MyWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyWindow.mm; sourceTree = "<group>"; };
+		7E2CFDC219B0C91200B874B4 /* OGLUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OGLUIKit.framework; path = ../../../../../Library/Frameworks/OGLUIKit.framework; sourceTree = "<group>"; };
+		7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RedTriangle.vsh; sourceTree = "<group>"; };
+		7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RedTriangle.fsh; sourceTree = "<group>"; };
+		7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		7E2CFDCB19B0CB0C00B874B4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E2CFDCD19B0CB2100B874B4 /* OpenGL.framework in Frameworks */,
+				7E2CFDC319B0C91200B874B4 /* OGLUIKit.framework in Frameworks */,
 				7E2CFD8919B0C87B00B874B4 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,6 +112,9 @@
 		7E2CFD8719B0C87B00B874B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E2CFDCB19B0CB0C00B874B4 /* CoreVideo.framework */,
+				7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */,
+				7E2CFDC219B0C91200B874B4 /* OGLUIKit.framework */,
 				7E2CFD8819B0C87B00B874B4 /* Cocoa.framework */,
 				7E2CFDA719B0C87B00B874B4 /* XCTest.framework */,
 				7E2CFD8A19B0C87B00B874B4 /* Other Frameworks */,
@@ -115,9 +135,15 @@
 		7E2CFD8E19B0C87B00B874B4 /* OGLExample */ = {
 			isa = PBXGroup;
 			children = (
+				7E2CFDBC19B0C8A500B874B4 /* OGLExample.cpp */,
+				7E2CFDBD19B0C8A500B874B4 /* OGLExample.h */,
+				7E2CFDBF19B0C8B400B874B4 /* MyWindow.h */,
+				7E2CFDC019B0C8B400B874B4 /* MyWindow.mm */,
 				7E2CFD9A19B0C87B00B874B4 /* AppDelegate.h */,
 				7E2CFD9B19B0C87B00B874B4 /* AppDelegate.m */,
 				7E2CFD9D19B0C87B00B874B4 /* MainMenu.xib */,
+				7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */,
+				7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */,
 				7E2CFDA019B0C87B00B874B4 /* Images.xcassets */,
 				7E2CFD8F19B0C87B00B874B4 /* Supporting Files */,
 			);
@@ -231,9 +257,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E2CFD9319B0C87B00B874B4 /* InfoPlist.strings in Resources */,
+				7E2CFDC719B0C94B00B874B4 /* RedTriangle.fsh in Resources */,
 				7E2CFDA119B0C87B00B874B4 /* Images.xcassets in Resources */,
 				7E2CFD9919B0C87B00B874B4 /* Credits.rtf in Resources */,
 				7E2CFD9F19B0C87B00B874B4 /* MainMenu.xib in Resources */,
+				7E2CFDC619B0C94B00B874B4 /* RedTriangle.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,7 +281,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E2CFD9C19B0C87B00B874B4 /* AppDelegate.m in Sources */,
+				7E2CFDBE19B0C8A500B874B4 /* OGLExample.cpp in Sources */,
 				7E2CFD9519B0C87B00B874B4 /* main.m in Sources */,
+				7E2CFDC119B0C8B400B874B4 /* MyWindow.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +416,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OGLExample/OGLExample-Prefix.pch";
 				INFOPLIST_FILE = "OGLExample/OGLExample-Info.plist";
@@ -399,6 +434,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OGLExample/OGLExample-Prefix.pch";
 				INFOPLIST_FILE = "OGLExample/OGLExample-Info.plist";
