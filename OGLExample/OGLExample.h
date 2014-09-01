@@ -69,6 +69,121 @@ private:
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTriangle2                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+class OGLExampleTriangle2 : public OGLExample {
+public:
+    ~OGLExampleTriangle2();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+    void setColor(float,float,float,float);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName, _vertexBufferObjectName;
+    GLuint _indexAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTriangle3                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * This example use color as a uniform attribute (TriangleUniformColor.fsh)
+ */
+class OGLExampleTriangle3 : public OGLExample {
+public:
+    ~OGLExampleTriangle3();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+    void setColor(float,float,float,float);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName, _vertexBufferObjectName;
+    GLuint _indexAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTriangle4                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * This example define color per vertex of 
+ * the triangle (TriangleDynColor.vsh/fsh)
+ */
+class OGLExampleTriangle4 : public OGLExample {
+public:
+    ~OGLExampleTriangle4();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+    void setColor(float,float,float,float);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName, _vertexBufferObjectName;
+    GLuint _positionAttrib,_colorAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleSquare                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * A square simply defined as 2 triangles (without element buffer).
+ */
+class OGLExampleSquare : public OGLExample {
+public:
+    ~OGLExampleSquare();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+    void setColor(float,float,float,float);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName, _vertexBufferObjectName;
+    GLuint _positionAttrib,_colorAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleSquare2                                                          //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * A square defined as 2 triangles using element buffer.
+ */
+class OGLExampleSquare2 : public OGLExample {
+public:
+    ~OGLExampleSquare2();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+    void setColor(float,float,float,float);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName;
+    GLuint _vertexBufferObjectName;
+    GLuint _elementBufferObjectName;
+    GLuint _positionAttrib,_colorAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
 // OGLExampleScissor                                                          //
 ////////////////////////////////////////////////////////////////////////////////
 

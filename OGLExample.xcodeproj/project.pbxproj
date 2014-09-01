@@ -24,6 +24,9 @@
 		7E2CFDC619B0C94B00B874B4 /* RedTriangle.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */; };
 		7E2CFDC719B0C94B00B874B4 /* RedTriangle.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */; };
 		7E2CFDCD19B0CB2100B874B4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */; };
+		7E9F05B419B4A3BD0032FB7D /* TriangleUniformColor.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B319B4A3BD0032FB7D /* TriangleUniformColor.fsh */; };
+		7E9F05B619B4A6EE0032FB7D /* TriangleDynColor.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B519B4A6EE0032FB7D /* TriangleDynColor.vsh */; };
+		7E9F05B819B4A6FB0032FB7D /* TriangleDynColor.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B719B4A6FB0032FB7D /* TriangleDynColor.fsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +68,9 @@
 		7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RedTriangle.fsh; sourceTree = "<group>"; };
 		7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7E2CFDCB19B0CB0C00B874B4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		7E9F05B319B4A3BD0032FB7D /* TriangleUniformColor.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleUniformColor.fsh; sourceTree = "<group>"; };
+		7E9F05B519B4A6EE0032FB7D /* TriangleDynColor.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleDynColor.vsh; sourceTree = "<group>"; };
+		7E9F05B719B4A6FB0032FB7D /* TriangleDynColor.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleDynColor.fsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +150,9 @@
 				7E2CFD9D19B0C87B00B874B4 /* MainMenu.xib */,
 				7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */,
 				7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */,
+				7E9F05B319B4A3BD0032FB7D /* TriangleUniformColor.fsh */,
+				7E9F05B519B4A6EE0032FB7D /* TriangleDynColor.vsh */,
+				7E9F05B719B4A6FB0032FB7D /* TriangleDynColor.fsh */,
 				7E2CFDA019B0C87B00B874B4 /* Images.xcassets */,
 				7E2CFD8F19B0C87B00B874B4 /* Supporting Files */,
 			);
@@ -259,8 +268,11 @@
 				7E2CFD9319B0C87B00B874B4 /* InfoPlist.strings in Resources */,
 				7E2CFDC719B0C94B00B874B4 /* RedTriangle.fsh in Resources */,
 				7E2CFDA119B0C87B00B874B4 /* Images.xcassets in Resources */,
+				7E9F05B619B4A6EE0032FB7D /* TriangleDynColor.vsh in Resources */,
+				7E9F05B819B4A6FB0032FB7D /* TriangleDynColor.fsh in Resources */,
 				7E2CFD9919B0C87B00B874B4 /* Credits.rtf in Resources */,
 				7E2CFD9F19B0C87B00B874B4 /* MainMenu.xib in Resources */,
+				7E9F05B419B4A3BD0032FB7D /* TriangleUniformColor.fsh in Resources */,
 				7E2CFDC619B0C94B00B874B4 /* RedTriangle.vsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -506,6 +518,7 @@
 				7E2CFDB819B0C87B00B874B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7E2CFDB919B0C87B00B874B4 /* Build configuration list for PBXNativeTarget "OGLExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +527,7 @@
 				7E2CFDBB19B0C87B00B874B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

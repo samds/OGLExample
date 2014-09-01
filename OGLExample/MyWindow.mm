@@ -11,7 +11,11 @@
 
 #define BASIC_CLEAR_COLOR       @"Clear Color"
 #define BASIC_TRIANGLE          @"Triangle"
-#define BASIC_COLORED_TRIANGLE  @"Colored Triangle"
+#define BASIC_COLORED_TRIANGLE  @"Triangle 2"
+#define BASIC_TRIANGLE_UNIFORM  @"Triangle 3"
+#define BASIC_TRIANGLE_MLCOLOR  @"Triangle 4"
+#define BASIC_SQUARE            @"Square"
+#define BASIC_SQUARE_EBO        @"Square EBO"
 #define BASIC_SCISSOR           @"Scissor"
 
 @interface MyWindow () <NSOutlineViewDelegate,
@@ -60,6 +64,10 @@
         _dataSource = @[BASIC_CLEAR_COLOR,
                         BASIC_TRIANGLE,
                         BASIC_COLORED_TRIANGLE,
+                        BASIC_TRIANGLE_UNIFORM,
+                        BASIC_TRIANGLE_MLCOLOR,
+                        BASIC_SQUARE,
+                        BASIC_SQUARE_EBO,
                         BASIC_SCISSOR];
         
         _openGLForm = new OGLExampleColor();
@@ -214,8 +222,19 @@
         _openGLForm = new OGLExampleTriangle;
     }
     else if ([item isEqualToString:BASIC_COLORED_TRIANGLE]) {
-        _openGLForm = new OGLExampleColor;
-        ((OGLExampleColor*)_openGLForm)->setColor(0.5f, 0.4f, 0.3f, 1.0f);
+        _openGLForm = new OGLExampleTriangle2;
+    }
+    else if ([item isEqualToString:BASIC_TRIANGLE_UNIFORM]) {
+        _openGLForm = new OGLExampleTriangle3;
+    }
+    else if ([item isEqualToString:BASIC_TRIANGLE_MLCOLOR]) {
+        _openGLForm = new OGLExampleTriangle4;
+    }
+    else if ([item isEqualToString:BASIC_SQUARE]) {
+        _openGLForm = new OGLExampleSquare;
+    }
+    else if ([item isEqualToString:BASIC_SQUARE_EBO]) {
+        _openGLForm = new OGLExampleSquare2;
     }
     else if ([item isEqualToString:BASIC_SCISSOR]) {
         _openGLForm = new OGLExampleScissor;

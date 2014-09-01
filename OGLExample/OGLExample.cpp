@@ -78,6 +78,11 @@ void OGLExampleColor::setColor(float r,float g,float b,float a)
 
 void OGLExampleTriangle::init(const void* arg)
 {
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
     glDisable(GL_BLEND);
     glDisable(GL_CULL_FACE);
     glDisable(GL_LINE_SMOOTH);
@@ -86,11 +91,6 @@ void OGLExampleTriangle::init(const void* arg)
     GetGLError();
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
-    
-    glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
-    glBindVertexArray(_vertexArrayObjectName);
     GetGLError();
 
     NSString *vhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
@@ -102,12 +102,18 @@ void OGLExampleTriangle::init(const void* arg)
 
     vhs = nil;
     fhs = nil;
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
 }
 
 void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
 {
-//    glClear(GL_COLOR_BUFFER_BIT);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glClear(GL_COLOR_BUFFER_BIT);
     GetGLError();
     
     // Use our shader
@@ -162,6 +168,10 @@ void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
     
     // Delete buffer
     glDeleteBuffers(1, &vertexbuffer);
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
 }
 
 void OGLExampleTriangle::didUpdateWindowRect(NSRect rect)
@@ -177,6 +187,840 @@ void OGLExampleTriangle::setColor(float r,float g,float b,float a)
 
 OGLExampleTriangle::~OGLExampleTriangle()
 {
+    glDeleteVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTriangle3                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+void OGLExampleTriangle3::init(const void* arg)
+{
+    ///////////////////
+    // Create VAO    //
+    ///////////////////
+    
+    // Create and Bind VAO
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    ///////////////////
+    // Create VBO    //
+    ///////////////////
+    
+    // An array of 3 vectors which represents 3 vertices
+    static const GLfloat vertex_data[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
+    };
+    
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &_vertexBufferObjectName);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    // Give our vertices to OpenGL.
+    GLsizeiptr size = sizeof(vertex_data);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+
+    ///////////////////
+    // Others        //
+    ///////////////////
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_DEPTH_TEST);
+    GetGLError();
+    
+    ///////////////////
+    // Load Shaders  //
+    ///////////////////
+    
+    NSString *vhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
+                                                    ofType:@"vsh"];
+    NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleUniformColor"
+                                                    ofType:@"fsh"];
+    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
+    GetGLError();
+    
+    // Free memory
+    vhs = nil;
+    fhs = nil;
+    
+    ////////////////////////////////
+    // Draw into the back buffer  //
+    ////////////////////////////////
+    
+    // Use our shader
+    glUseProgram(_programID);
+    
+    // Specify the layout of the vertex data
+    _indexAttrib = glGetAttribLocation(_programID, "position");
+    glVertexAttribPointer(
+                          _indexAttrib,       // attribute 0. No particular
+                                              // reason for 0, but must match
+                                              // the layout in the shader.
+                          3,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          0,                  // stride
+                          (void*)0            // array buffer offset
+                          );
+    
+    // Set the color
+    GLint uniColor = glGetUniformLocation(_programID, "triangleColor");
+    glUniform3f(uniColor, 0.2f, 1.0f, 0.5f);
+
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleTriangle3::renderForTime(const CVTimeStamp * outputTime)
+{
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    GetGLError();
+    glClear(GL_COLOR_BUFFER_BIT);
+    GetGLError();
+
+    /*
+     * Draw the triangle !
+     * Starting from vertex 0.
+     * 3 vertices total -> 1 triangle
+     */
+    glEnableVertexAttribArray(_indexAttrib);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDisableVertexAttribArray(_indexAttrib);
+
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleTriangle3::didUpdateWindowRect(NSRect rect)
+{
+    glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+void OGLExampleTriangle3::setColor(float r,float g,float b,float a)
+{
+    glClearColor(r,g,b,a);
+    GetGLError();
+}
+
+OGLExampleTriangle3::~OGLExampleTriangle3()
+{
+    ////////////////////////////////
+    // Free the memory            //
+    ////////////////////////////////
+    
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GetGLError();
+    
+    // Delete VBO
+    glDeleteBuffers(1, &_vertexBufferObjectName);
+    GetGLError();
+
+    // Delete shader program
+    glDeleteProgram(_programID);
+    GetGLError();
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+    
+    // Delete VAO
+    glDeleteVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTriangle2                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+void OGLExampleTriangle2::init(const void* arg)
+{
+    ///////////////////
+    // Create VAO    //
+    ///////////////////
+    
+    // Create and Bind VAO
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    ///////////////////
+    // Create VBO    //
+    ///////////////////
+    
+    // An array of 3 vectors which represents 3 vertices
+    static const GLfloat vertex_data[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f
+    };
+    
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &_vertexBufferObjectName);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    // Give our vertices to OpenGL.
+    GLsizeiptr size = sizeof(vertex_data);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    
+    ///////////////////
+    // Others        //
+    ///////////////////
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_DEPTH_TEST);
+    GetGLError();
+    
+    ///////////////////
+    // Load Shaders  //
+    ///////////////////
+    
+    NSString *vhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
+                                                    ofType:@"vsh"];
+    NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
+                                                    ofType:@"fsh"];
+    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
+    GetGLError();
+    
+    // Free memory
+    vhs = nil;
+    fhs = nil;
+    
+    ////////////////////////////////
+    // Draw into the back buffer  //
+    ////////////////////////////////
+    
+    // Use our shader
+    glUseProgram(_programID);
+    
+    // Specify the layout of the vertex data
+    _indexAttrib = glGetAttribLocation(_programID, "position");
+    glVertexAttribPointer(
+                          _indexAttrib,       // attribute index
+                          3,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          0,                  // stride
+                          (void*)0            // array buffer offset
+                          );
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleTriangle2::renderForTime(const CVTimeStamp * outputTime)
+{
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    GetGLError();
+    glClear(GL_COLOR_BUFFER_BIT);
+    GetGLError();
+    
+    /*
+     * Draw the triangle !
+     * Starting from vertex 0.
+     * 3 vertices total -> 1 triangle
+     */
+    glEnableVertexAttribArray(_indexAttrib);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDisableVertexAttribArray(_indexAttrib);
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleTriangle2::didUpdateWindowRect(NSRect rect)
+{
+    glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+void OGLExampleTriangle2::setColor(float r,float g,float b,float a)
+{
+    glClearColor(r,g,b,a);
+    GetGLError();
+}
+
+OGLExampleTriangle2::~OGLExampleTriangle2()
+{
+    ////////////////////////////////
+    // Free the memory            //
+    ////////////////////////////////
+    
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GetGLError();
+    
+    // Delete VBO
+    glDeleteBuffers(1, &_vertexBufferObjectName);
+    GetGLError();
+    
+    // Delete shader program
+    glDeleteProgram(_programID);
+    GetGLError();
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+    
+    // Delete VAO
+    glDeleteVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTriangle4                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+void OGLExampleTriangle4::init(const void* arg)
+{
+    ///////////////////
+    // Create VAO    //
+    ///////////////////
+    
+    // Create and Bind VAO
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    ///////////////////
+    // Create VBO    //
+    ///////////////////
+    
+    // An array of 3 vectors which represents 3 vertices
+    static const GLfloat vertex_data[] = {
+        0.0f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+       -0.5f, -0.5f,  0.0f,  0.0f,  1.0f
+    };
+
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &_vertexBufferObjectName);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    // Give our vertices to OpenGL.
+    GLsizeiptr size = sizeof(vertex_data);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    
+    ///////////////////
+    // Others        //
+    ///////////////////
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_DEPTH_TEST);
+    GetGLError();
+    
+    ///////////////////
+    // Load Shaders  //
+    ///////////////////
+    
+    NSString *vhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
+                                                    ofType:@"vsh"];
+    NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
+                                                    ofType:@"fsh"];
+    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
+    GetGLError();
+    
+    // Free memory
+    vhs = nil;
+    fhs = nil;
+    
+    ////////////////////////////////
+    // Draw into the back buffer  //
+    ////////////////////////////////
+    
+    // Use our shader
+    glUseProgram(_programID);
+    
+    // Specify the layout of the vertex data
+    _positionAttrib = glGetAttribLocation(_programID, "inPosition");
+    glEnableVertexAttribArray(_positionAttrib);
+    glVertexAttribPointer(
+                          _positionAttrib,    // attribute index
+                          2,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          5*sizeof(GLfloat),  // stride
+                          BUFFER_OFFSET(0)    // array buffer offset
+                          );
+    
+    _colorAttrib = glGetAttribLocation(_programID, "inColor");
+    glEnableVertexAttribArray(_colorAttrib);
+    glVertexAttribPointer(_colorAttrib,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          5*sizeof(float),
+                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          );
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleTriangle4::renderForTime(const CVTimeStamp * outputTime)
+{
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    GetGLError();
+    glClear(GL_COLOR_BUFFER_BIT);
+    GetGLError();
+    
+    /*
+     * Draw the triangle !
+     * Starting from vertex 0.
+     * 3 vertices total -> 1 triangle
+     */
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleTriangle4::didUpdateWindowRect(NSRect rect)
+{
+    glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+void OGLExampleTriangle4::setColor(float r,float g,float b,float a)
+{
+    glClearColor(r,g,b,a);
+    GetGLError();
+}
+
+OGLExampleTriangle4::~OGLExampleTriangle4()
+{
+    ////////////////////////////////
+    // Free the memory            //
+    ////////////////////////////////
+    
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glDisableVertexAttribArray(_positionAttrib);
+    glDisableVertexAttribArray(_colorAttrib);
+    
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GetGLError();
+    
+    // Delete VBO
+    glDeleteBuffers(1, &_vertexBufferObjectName);
+    GetGLError();
+    
+    // Delete shader program
+    glDeleteProgram(_programID);
+    GetGLError();
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+    
+    // Delete VAO
+    glDeleteVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleSquare                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
+void OGLExampleSquare::init(const void* arg)
+{
+    ///////////////////
+    // Create VAO    //
+    ///////////////////
+    
+    // Create and Bind VAO
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    ///////////////////
+    // Create VBO    //
+    ///////////////////
+    
+    // An array of 3 vectors which represents 3 vertices
+    static const GLfloat vertex_data[] = {
+        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+        
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // Bottom-left
+        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f  // Top-left
+    };
+    
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &_vertexBufferObjectName);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    // Give our vertices to OpenGL.
+    GLsizeiptr size = sizeof(vertex_data);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    
+    ///////////////////
+    // Others        //
+    ///////////////////
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_DEPTH_TEST);
+    GetGLError();
+    
+    ///////////////////
+    // Load Shaders  //
+    ///////////////////
+    
+    NSString *vhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
+                                                    ofType:@"vsh"];
+    NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
+                                                    ofType:@"fsh"];
+    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
+    GetGLError();
+    
+    // Free memory
+    vhs = nil;
+    fhs = nil;
+    
+    ////////////////////////////////
+    // Draw into the back buffer  //
+    ////////////////////////////////
+    
+    // Use our shader
+    glUseProgram(_programID);
+    
+    // Specify the layout of the vertex data
+    _positionAttrib = glGetAttribLocation(_programID, "inPosition");
+    glEnableVertexAttribArray(_positionAttrib);
+    glVertexAttribPointer(
+                          _positionAttrib,    // attribute index
+                          2,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          5*sizeof(GLfloat),  // stride
+                          BUFFER_OFFSET(0)    // array buffer offset
+                          );
+    
+    _colorAttrib = glGetAttribLocation(_programID, "inColor");
+    glEnableVertexAttribArray(_colorAttrib);
+    glVertexAttribPointer(_colorAttrib,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          5*sizeof(float),
+                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          );
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleSquare::renderForTime(const CVTimeStamp * outputTime)
+{
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    GetGLError();
+    glClear(GL_COLOR_BUFFER_BIT);
+    GetGLError();
+    
+    /*
+     * Draw the triangle !
+     * Starting from vertex 0.
+     * 3 vertices total -> 1 triangle
+     */
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleSquare::didUpdateWindowRect(NSRect rect)
+{
+    glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+void OGLExampleSquare::setColor(float r,float g,float b,float a)
+{
+    glClearColor(r,g,b,a);
+    GetGLError();
+}
+
+OGLExampleSquare::~OGLExampleSquare()
+{
+    ////////////////////////////////
+    // Free the memory            //
+    ////////////////////////////////
+    
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glDisableVertexAttribArray(_positionAttrib);
+    glDisableVertexAttribArray(_colorAttrib);
+    
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GetGLError();
+    
+    // Delete VBO
+    glDeleteBuffers(1, &_vertexBufferObjectName);
+    GetGLError();
+    
+    // Delete shader program
+    glDeleteProgram(_programID);
+    GetGLError();
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+    
+    // Delete VAO
+    glDeleteVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleSquare2                                                          //
+////////////////////////////////////////////////////////////////////////////////
+
+void OGLExampleSquare2::init(const void* arg)
+{
+    ///////////////////
+    // Create VAO    //
+    ///////////////////
+    
+    // Create and Bind VAO
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    GetGLError();
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    ///////////////////
+    // Create VBO    //
+    ///////////////////
+    
+    // An array of 3 vectors which represents 3 vertices
+    static const GLfloat vertex_data[] = {
+        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // Bottom-left
+    };
+    
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &_vertexBufferObjectName);
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    // Give our vertices to OpenGL.
+    GLsizeiptr size = sizeof(vertex_data);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    
+    ///////////////////
+    // Others        //
+    ///////////////////
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_DEPTH_TEST);
+    GetGLError();
+    
+    ///////////////////
+    // Load Shaders  //
+    ///////////////////
+    
+    NSString *vhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
+                                                    ofType:@"vsh"];
+    NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
+                                                    ofType:@"fsh"];
+    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
+    GetGLError();
+    
+    // Free memory
+    vhs = nil;
+    fhs = nil;
+    
+    //////////////////////////////////
+    // Create Element Buffer Object //
+    //////////////////////////////////
+    
+    GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    
+    glGenBuffers(1, &_elementBufferObjectName);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _elementBufferObjectName);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 sizeof(elements),
+                 elements,
+                 GL_STATIC_DRAW
+                 );
+    
+    ////////////////////////////////
+    // Draw into the back buffer  //
+    ////////////////////////////////
+    
+    // Use our shader
+    glUseProgram(_programID);
+    
+    // Specify the layout of the vertex data
+    _positionAttrib = glGetAttribLocation(_programID, "inPosition");
+    glEnableVertexAttribArray(_positionAttrib);
+    glVertexAttribPointer(
+                          _positionAttrib,    // attribute index
+                          2,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          5*sizeof(GLfloat),  // stride
+                          BUFFER_OFFSET(0)    // array buffer offset
+                          );
+    
+    _colorAttrib = glGetAttribLocation(_programID, "inColor");
+    glEnableVertexAttribArray(_colorAttrib);
+    glVertexAttribPointer(_colorAttrib,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          5*sizeof(float),
+                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          );
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleSquare2::renderForTime(const CVTimeStamp * outputTime)
+{
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    GetGLError();
+    glClear(GL_COLOR_BUFFER_BIT);
+    GetGLError();
+    
+    // Draw the square ( 2 triangles )
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+}
+
+void OGLExampleSquare2::didUpdateWindowRect(NSRect rect)
+{
+    glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+void OGLExampleSquare2::setColor(float r,float g,float b,float a)
+{
+    glClearColor(r,g,b,a);
+    GetGLError();
+}
+
+OGLExampleSquare2::~OGLExampleSquare2()
+{
+    ////////////////////////////////
+    // Free the memory            //
+    ////////////////////////////////
+    
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    GetGLError();
+    
+    glDisableVertexAttribArray(_positionAttrib);
+    glDisableVertexAttribArray(_colorAttrib);
+    
+    // Delete EBO
+    glDeleteBuffers(1, &_elementBufferObjectName);
+    GetGLError();
+    
+    // Unbind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GetGLError();
+    
+    // Delete VBO
+    glDeleteBuffers(1, &_vertexBufferObjectName);
+    GetGLError();
+    
+    // Delete shader program
+    glDeleteProgram(_programID);
+    GetGLError();
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    GetGLError();
+    
+    // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
     GetGLError();
 }
