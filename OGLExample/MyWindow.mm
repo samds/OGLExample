@@ -9,6 +9,10 @@
 #import "MyWindow.h"
 #import "OGLExample.h"
 
+// A row must not have the same as a group
+//
+//
+
 #define BASIC_CLEAR_COLOR       @"Clear Color"
 #define BASIC_TRIANGLE          @"Triangle"
 #define BASIC_COLORED_TRIANGLE  @"Triangle 2"
@@ -18,10 +22,16 @@
 #define BASIC_SQUARE_EBO        @"Square EBO"
 #define BASIC_SCISSOR           @"Scissor"
 
+#define TEXTURE_1               @"Texture Basic"
+#define TEXTURE_2               @"Texture Wrong"
+#define TEXTURE_3               @"Texture Corrected"
+#define TEXTURE_4               @"Texture GLKit"
+
 @interface MyWindow () <NSOutlineViewDelegate,
                         NSOutlineViewDataSource,
                         OpenGLDynamicViewDelegate>
 @property(strong,nonatomic) NSArray *dataSource;
+@property(strong,nonatomic) NSArray *dataSourceTexture;
 @property(assign,nonatomic) OGLExample *openGLForm;
 @property(strong,nonatomic) NSArray *topLevelItems;
 @end
@@ -43,10 +53,13 @@
     
     // Expand all the root items; disable the expansion animation that
     // normally happens
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:0];
+//    [NSAnimationContext beginGrouping];
+//    [[NSAnimationContext currentContext] setDuration:0];
+    [self.outlineView beginUpdates];
     [self.outlineView expandItem:nil expandChildren:YES];
-    [NSAnimationContext endGrouping];}
+    [self.outlineView endUpdates];
+//    [NSAnimationContext endGrouping];
+}
 
 - (instancetype)initWithContentRect:(NSRect)contentRect
                           styleMask:(NSUInteger)aStyle
@@ -69,7 +82,11 @@
                         BASIC_SQUARE,
                         BASIC_SQUARE_EBO,
                         BASIC_SCISSOR];
-        
+        _dataSourceTexture = @[TEXTURE_1,
+                               TEXTURE_2,
+                               TEXTURE_3,
+                               TEXTURE_4
+                               ];
         _openGLForm = new OGLExampleColor();
     }
     return self;
@@ -115,6 +132,9 @@
     else if ([item isEqualToString:@"Basic"]) {
         return [_dataSource count];
     }
+    else if ([item isEqualToString:@"Texture"]) {
+        return [_dataSourceTexture count];
+    }
     else {
         return 0;
     }
@@ -125,8 +145,15 @@
     NSArray *children;
     if (item == nil) {
         children = _topLevelItems;
-    } else {
+    }
+    else if ([item isEqualToString:@"Basic"]) {
         children = _dataSource;
+    }
+    else if ([item isEqualToString:@"Texture"]) {
+        children = _dataSourceTexture;
+    }
+    else {
+        children = [NSArray array];
     }
     return children;
 }
@@ -238,6 +265,31 @@
     }
     else if ([item isEqualToString:BASIC_SCISSOR]) {
         _openGLForm = new OGLExampleScissor;
+        
+        // Pass the View size to our OpenGl shape
+        [self didUpdateWindowRect:[self.openGLView bounds]];
+    }
+    
+    if ([item isEqualToString:TEXTURE_2]) {
+        _openGLForm = new OGLExampleTexture2;
+        
+        // Pass the View size to our OpenGl shape
+        [self didUpdateWindowRect:[self.openGLView bounds]];
+    }
+    else if ([item isEqualToString:TEXTURE_3]) {
+        _openGLForm = new OGLExampleTexture3;
+        
+        // Pass the View size to our OpenGl shape
+        [self didUpdateWindowRect:[self.openGLView bounds]];
+    }
+    else if ([item isEqualToString:TEXTURE_4]) {
+        _openGLForm = new OGLExampleTexture4;
+        
+        // Pass the View size to our OpenGl shape
+        [self didUpdateWindowRect:[self.openGLView bounds]];
+    }
+    else if ([item isEqualToString:TEXTURE_1]) {
+        _openGLForm = new OGLExampleTexture1;
         
         // Pass the View size to our OpenGl shape
         [self didUpdateWindowRect:[self.openGLView bounds]];

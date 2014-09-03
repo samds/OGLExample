@@ -187,6 +187,20 @@ private:
 // OGLExampleScissor                                                          //
 ////////////////////////////////////////////////////////////////////////////////
 
+/*
+ * We define 3 scissor boxes :
+ *  BOX1 in Red
+ *  BOX2 in Green
+ *  BOX3 in Blue
+ *
+ *  -----------------
+ *  |   1   |   2   |
+ *  |       |       |
+ *  |---------------|
+ *  |       3       |
+ *  |               |
+ *  -----------------
+ */
 class OGLExampleScissor : public OGLExample {
 public:
     OGLExampleScissor();
@@ -201,4 +215,113 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTexture1                                                         //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * Display a basic texture made of 4 pixels.
+ * Partially inspired by
+ * http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_06
+ */
+class OGLExampleTexture1 : public OGLExample {
+public:
+    ~OGLExampleTexture1();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName;
+    GLuint _vertexBufferObjectName[3]; // 0 vertex and 1 texture coordinate,3EBO
+//    GLuint _textureBufferObjectName;
+    GLuint _positionAttrib,_textureAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTexture2                                                         //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * how to load a (Bitmap) texture,
+ * how to reverse texture coordinate in fragment
+ * ...
+ */
+class OGLExampleTexture2 : public OGLExample {
+public:
+    ~OGLExampleTexture2();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName;
+    GLuint _vertexBufferObjectName;
+    GLuint _elementBufferObjectName;
+    GLuint _textureBufferObjectName;
+    GLuint _positionAttrib,_textureAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTexture3                                                         //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * OGLExampleTexture2 with corrections :
+ * - texture reversed (im the fragment shader)
+ * - right color (replace the color format from GL_RGB to GL_BGR)
+ */
+class OGLExampleTexture3 : public OGLExample {
+public:
+    ~OGLExampleTexture3();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName;
+    GLuint _vertexBufferObjectName;
+    GLuint _elementBufferObjectName;
+    GLuint _textureBufferObjectName;
+    GLuint _positionAttrib,_textureAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleTexture4                                                         //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * Pretty much the same as OGLExampleTexture3 except we use
+ * GLKit to load our texture AND
+ * we blend the texture with the color gradient
+ *  -------------------
+ *  |  red     green  |
+ *  |  white   blue   |
+ *  -------------------
+ */
+class OGLExampleTexture4 : public OGLExample {
+public:
+    ~OGLExampleTexture4();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName;
+    GLuint _vertexBufferObjectName;
+    GLuint _elementBufferObjectName;
+    GLuint _textureBufferObjectName;
+    GLuint _positionAttrib,_colorAttrib,_textureAttrib;
+};
+////////////////////////////////////////////////////////////////////////////////
 #endif /* defined(__OpenGLTutorial__OGLExample__) */
