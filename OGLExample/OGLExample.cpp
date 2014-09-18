@@ -43,16 +43,16 @@ void OGLExampleColor::init(const void* arg)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(_r,_g,_b,_a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleColor::renderForTime(const CVTimeStamp * outputTime)
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleColor::didUpdateWindowRect(NSRect rect)
@@ -67,7 +67,7 @@ void OGLExampleColor::setColor(float r,float g,float b,float a)
     _b = b;
     _a = a;
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -80,42 +80,42 @@ void OGLExampleColor::setColor(float r,float g,float b,float a)
 void OGLExampleTriangle::init(const void* arg)
 {
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisable(GL_BLEND);
     glDisable(GL_CULL_FACE);
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     NSString *vhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
 
     vhs = nil;
     fhs = nil;
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
 {
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Use our shader
     glUseProgram(_programID);
@@ -172,7 +172,7 @@ void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle::didUpdateWindowRect(NSRect rect)
@@ -183,13 +183,13 @@ void OGLExampleTriangle::didUpdateWindowRect(NSRect rect)
 void OGLExampleTriangle::setColor(float r,float g,float b,float a)
 {
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 OGLExampleTriangle::~OGLExampleTriangle()
 {
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -207,9 +207,9 @@ void OGLExampleTriangle3::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -239,7 +239,7 @@ void OGLExampleTriangle3::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -249,8 +249,8 @@ void OGLExampleTriangle3::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleUniformColor"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -282,19 +282,19 @@ void OGLExampleTriangle3::init(const void* arg)
 
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle3::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     /*
      * Draw the triangle !
@@ -307,7 +307,7 @@ void OGLExampleTriangle3::renderForTime(const CVTimeStamp * outputTime)
 
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle3::didUpdateWindowRect(NSRect rect)
@@ -318,7 +318,7 @@ void OGLExampleTriangle3::didUpdateWindowRect(NSRect rect)
 void OGLExampleTriangle3::setColor(float r,float g,float b,float a)
 {
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 OGLExampleTriangle3::~OGLExampleTriangle3()
@@ -329,27 +329,27 @@ OGLExampleTriangle3::~OGLExampleTriangle3()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -367,9 +367,9 @@ void OGLExampleTriangle2::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -399,7 +399,7 @@ void OGLExampleTriangle2::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -409,8 +409,8 @@ void OGLExampleTriangle2::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -436,19 +436,19 @@ void OGLExampleTriangle2::init(const void* arg)
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle2::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     /*
      * Draw the triangle !
@@ -461,7 +461,7 @@ void OGLExampleTriangle2::renderForTime(const CVTimeStamp * outputTime)
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle2::didUpdateWindowRect(NSRect rect)
@@ -472,7 +472,7 @@ void OGLExampleTriangle2::didUpdateWindowRect(NSRect rect)
 void OGLExampleTriangle2::setColor(float r,float g,float b,float a)
 {
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 OGLExampleTriangle2::~OGLExampleTriangle2()
@@ -483,27 +483,27 @@ OGLExampleTriangle2::~OGLExampleTriangle2()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -521,9 +521,9 @@ void OGLExampleTriangle4::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -553,7 +553,7 @@ void OGLExampleTriangle4::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -563,8 +563,8 @@ void OGLExampleTriangle4::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -586,7 +586,7 @@ void OGLExampleTriangle4::init(const void* arg)
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           5*sizeof(GLfloat),  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
     
     _colorAttrib = glGetAttribLocation(_programID, "inColor");
@@ -596,24 +596,24 @@ void OGLExampleTriangle4::init(const void* arg)
                           GL_FLOAT,
                           GL_FALSE,
                           5*sizeof(float),
-                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(2*sizeof(GLfloat))
                           );
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle4::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     /*
      * Draw the triangle !
@@ -621,10 +621,11 @@ void OGLExampleTriangle4::renderForTime(const CVTimeStamp * outputTime)
      * 3 vertices total -> 1 triangle
      */
     glDrawArrays(GL_TRIANGLES, 0, 3);
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTriangle4::didUpdateWindowRect(NSRect rect)
@@ -635,7 +636,7 @@ void OGLExampleTriangle4::didUpdateWindowRect(NSRect rect)
 void OGLExampleTriangle4::setColor(float r,float g,float b,float a)
 {
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 OGLExampleTriangle4::~OGLExampleTriangle4()
@@ -646,30 +647,30 @@ OGLExampleTriangle4::~OGLExampleTriangle4()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_colorAttrib);
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -687,9 +688,9 @@ void OGLExampleSquare::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -723,7 +724,7 @@ void OGLExampleSquare::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -733,8 +734,8 @@ void OGLExampleSquare::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -756,7 +757,7 @@ void OGLExampleSquare::init(const void* arg)
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           5*sizeof(GLfloat),  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
     
     _colorAttrib = glGetAttribLocation(_programID, "inColor");
@@ -766,24 +767,24 @@ void OGLExampleSquare::init(const void* arg)
                           GL_FLOAT,
                           GL_FALSE,
                           5*sizeof(float),
-                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(2*sizeof(GLfloat))
                           );
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleSquare::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     /*
      * Draw the triangle !
@@ -794,7 +795,7 @@ void OGLExampleSquare::renderForTime(const CVTimeStamp * outputTime)
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleSquare::didUpdateWindowRect(NSRect rect)
@@ -805,7 +806,7 @@ void OGLExampleSquare::didUpdateWindowRect(NSRect rect)
 void OGLExampleSquare::setColor(float r,float g,float b,float a)
 {
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 OGLExampleSquare::~OGLExampleSquare()
@@ -816,30 +817,30 @@ OGLExampleSquare::~OGLExampleSquare()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_colorAttrib);
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -857,9 +858,9 @@ void OGLExampleSquare2::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -890,7 +891,7 @@ void OGLExampleSquare2::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -900,8 +901,8 @@ void OGLExampleSquare2::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -940,7 +941,7 @@ void OGLExampleSquare2::init(const void* arg)
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           5*sizeof(GLfloat),  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)    // array buffer offset
                           );
     
     _colorAttrib = glGetAttribLocation(_programID, "inColor");
@@ -950,31 +951,31 @@ void OGLExampleSquare2::init(const void* arg)
                           GL_FLOAT,
                           GL_FALSE,
                           5*sizeof(float),
-                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(2*sizeof(GLfloat))
                           );
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleSquare2::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleSquare2::didUpdateWindowRect(NSRect rect)
@@ -985,7 +986,7 @@ void OGLExampleSquare2::didUpdateWindowRect(NSRect rect)
 void OGLExampleSquare2::setColor(float r,float g,float b,float a)
 {
     glClearColor(r,g,b,a);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 OGLExampleSquare2::~OGLExampleSquare2()
@@ -996,34 +997,34 @@ OGLExampleSquare2::~OGLExampleSquare2()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_colorAttrib);
     
     // Delete EBO
     glDeleteBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1050,10 +1051,10 @@ void OGLExampleScissor::init(const void* arg)
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LINE_SMOOTH);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     glEnable(GL_SCISSOR_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 /*
@@ -1079,17 +1080,17 @@ void OGLExampleScissor::renderForTime(const CVTimeStamp * outputTime)
     glScissor(x1, y1, w1, h1);
     glClearColor(1.0f,0.0f,0.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glScissor(x2, y2, w2, h2);
     glClearColor(0.0f,1.0f,0.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glScissor(x3, y3, w3, h3);
     glClearColor(0.0f,0.0f,1.0f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleScissor::didUpdateWindowRect(NSRect rect)
@@ -1115,9 +1116,9 @@ void OGLExampleTexture1::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Others        //
@@ -1128,7 +1129,7 @@ void OGLExampleTexture1::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -1136,7 +1137,7 @@ void OGLExampleTexture1::init(const void* arg)
     
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(3, _vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Vertices
     static const GLfloat vertex_data[] = {
@@ -1148,14 +1149,14 @@ void OGLExampleTexture1::init(const void* arg)
     
     // Bind our vertices
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName[0]);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     glBufferData(GL_ARRAY_BUFFER,
                  sizeof(vertex_data),
                  vertex_data,
                  GL_STATIC_DRAW
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Texture coordinate
     static const GLfloat textureCoor_data[] = {
@@ -1167,14 +1168,14 @@ void OGLExampleTexture1::init(const void* arg)
     
     // Bind the texture coordinates
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName[1]);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     // Give the coordinates to OpenGL.
     glBufferData(GL_ARRAY_BUFFER,
                  sizeof(textureCoor_data),
                  textureCoor_data,
                  GL_STATIC_DRAW
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Element Buffer Object
     GLuint elements[] = {
@@ -1183,13 +1184,13 @@ void OGLExampleTexture1::init(const void* arg)
     };
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vertexBufferObjectName[2]);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  sizeof(elements),
                  elements,
                  GL_STATIC_DRAW
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -1199,8 +1200,8 @@ void OGLExampleTexture1::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture1"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -1212,38 +1213,38 @@ void OGLExampleTexture1::init(const void* arg)
     
     // Use our shader
     glUseProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glEnableVertexAttribArray(_positionAttrib);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName[0]);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(
                           _positionAttrib,    // attribute index
                           2,                  // size
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           0,                  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     _textureAttrib = glGetAttribLocation(_programID, "inTextureCoord");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glEnableVertexAttribArray(_textureAttrib);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName[1]);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(_textureAttrib,
                           2,
                           GL_FLOAT,
                           GL_FALSE,
                           0,
-                          BUFFER_OFFSET(0)
+                          OGL_BUFFER_OFFSET(0)
                           );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ////////////////////////////////
     // Load Texture               //
@@ -1311,30 +1312,30 @@ void OGLExampleTexture1::init(const void* arg)
                  GL_FLOAT,
                  (const GLvoid*)image
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture1::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture1::didUpdateWindowRect(NSRect rect)
@@ -1350,7 +1351,7 @@ OGLExampleTexture1::~OGLExampleTexture1()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_textureAttrib);
@@ -1361,23 +1362,23 @@ OGLExampleTexture1::~OGLExampleTexture1()
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(3, _vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1395,9 +1396,9 @@ void OGLExampleTexture2::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Others        //
@@ -1408,7 +1409,7 @@ void OGLExampleTexture2::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -1439,8 +1440,8 @@ void OGLExampleTexture2::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture2"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -1452,35 +1453,35 @@ void OGLExampleTexture2::init(const void* arg)
     
     // Use our shader
     glUseProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glEnableVertexAttribArray(_positionAttrib);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(
                           _positionAttrib,    // attribute index
                           2,                  // size
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           4*sizeof(GLfloat),  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     _textureAttrib = glGetAttribLocation(_programID, "inTextureCoord");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glEnableVertexAttribArray(_textureAttrib);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(_textureAttrib,
                           2,
                           GL_FLOAT,
                           GL_FALSE,
                           4*sizeof(GLfloat),
-                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(2*sizeof(GLfloat))
                           );
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     ////////////////////////////////
     // Load Texture               //
@@ -1489,16 +1490,16 @@ void OGLExampleTexture2::init(const void* arg)
      // Get a handle for our "myTextureSampler" uniform
      // Default ?????
     GLint textureUniformLocation = glGetUniformLocation(_programID, "tex");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glUniform1i(textureUniformLocation, 0); // Set our "myTextureSampler" sampler to user Texture Unit 0
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glActiveTexture(GL_TEXTURE0); // Bind our texture in Texture Unit 0
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     // Not needed?
     glGenTextures( 1, &_textureBufferObjectName );
     glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Setting the minification and magnification filters
     // to nearest instead of linear, may run faster on some
@@ -1541,7 +1542,7 @@ void OGLExampleTexture2::init(const void* arg)
                  GL_UNSIGNED_BYTE,
                  (const GLvoid*)image
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     //////////////////////////////////
     // Create Element Buffer Object //
@@ -1553,38 +1554,38 @@ void OGLExampleTexture2::init(const void* arg)
     };
     
     glGenBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  sizeof(elements),
                  elements,
                  GL_STATIC_DRAW
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture2::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture2::didUpdateWindowRect(NSRect rect)
@@ -1600,38 +1601,38 @@ OGLExampleTexture2::~OGLExampleTexture2()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_textureAttrib);
 
     // Delete EBO
     glDeleteBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete Texture
     glDeleteBuffers(1, &_textureBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1649,9 +1650,9 @@ void OGLExampleTexture3::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Others        //
@@ -1662,7 +1663,7 @@ void OGLExampleTexture3::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -1693,8 +1694,8 @@ void OGLExampleTexture3::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture3"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -1706,35 +1707,35 @@ void OGLExampleTexture3::init(const void* arg)
     
     // Use our shader
     glUseProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glEnableVertexAttribArray(_positionAttrib);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(
                           _positionAttrib,    // attribute index
                           2,                  // size
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           4*sizeof(GLfloat),  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     _textureAttrib = glGetAttribLocation(_programID, "inTextureCoord");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glEnableVertexAttribArray(_textureAttrib);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(_textureAttrib,
                           2,
                           GL_FLOAT,
                           GL_FALSE,
                           4*sizeof(GLfloat),
-                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(2*sizeof(GLfloat))
                           );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ////////////////////////////////
     // Load Texture               //
@@ -1743,16 +1744,16 @@ void OGLExampleTexture3::init(const void* arg)
     // Get a handle for our "tex" uniform
     // Default ?????
     GLint textureUniformLocation = glGetUniformLocation(_programID, "tex");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glUniform1i(textureUniformLocation, 0); // Set our "tex" sampler to user Texture Unit 0
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glActiveTexture(GL_TEXTURE0); // Bind our texture in Texture Unit 0
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Not needed?
     glGenTextures( 1, &_textureBufferObjectName );
     glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Setting the minification and magnification filters
     // to nearest instead of linear, may run faster on some
@@ -1795,7 +1796,7 @@ void OGLExampleTexture3::init(const void* arg)
                  GL_UNSIGNED_BYTE,
                  (const GLvoid*)image
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     //////////////////////////////////
     // Create Element Buffer Object //
@@ -1807,38 +1808,38 @@ void OGLExampleTexture3::init(const void* arg)
     };
     
     glGenBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  sizeof(elements),
                  elements,
                  GL_STATIC_DRAW
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture3::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture3::didUpdateWindowRect(NSRect rect)
@@ -1854,41 +1855,41 @@ OGLExampleTexture3::~OGLExampleTexture3()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_textureAttrib);
     
     // Delete EBO
     glDeleteBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete Texture
     glDeleteBuffers(1, &_textureBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 
     // Delete Texture
     glDeleteTextures(1, &_textureBufferObjectName);
 
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1906,9 +1907,9 @@ void OGLExampleTexture4::init(const void* arg)
     
     // Create and Bind VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Create VBO    //
@@ -1940,7 +1941,7 @@ void OGLExampleTexture4::init(const void* arg)
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_DEPTH_TEST);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Load Shaders  //
@@ -1950,8 +1951,8 @@ void OGLExampleTexture4::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture4"
                                                     ofType:@"fsh"];
-    _programID = loadShaders(vhs.UTF8String,fhs.UTF8String);
-    GetGLError();
+    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
     
     // Free memory
     vhs = nil;
@@ -1973,7 +1974,7 @@ void OGLExampleTexture4::init(const void* arg)
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           7*sizeof(GLfloat),  // stride
-                          BUFFER_OFFSET(0)    // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
     
     _colorAttrib = glGetAttribLocation(_programID, "inColor");
@@ -1983,7 +1984,7 @@ void OGLExampleTexture4::init(const void* arg)
                           GL_FLOAT,
                           GL_FALSE,
                           7*sizeof(GLfloat),
-                          BUFFER_OFFSET(2*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(2*sizeof(GLfloat))
                           );
     
     _textureAttrib = glGetAttribLocation(_programID, "inTextureCoord");
@@ -1993,7 +1994,7 @@ void OGLExampleTexture4::init(const void* arg)
                           GL_FLOAT,
                           GL_FALSE,
                           7*sizeof(GLfloat),
-                          BUFFER_OFFSET(5*sizeof(GLfloat))
+                          OGL_BUFFER_OFFSET(5*sizeof(GLfloat))
                           );
     
     ////////////////////////////////
@@ -2011,14 +2012,14 @@ void OGLExampleTexture4::init(const void* arg)
      // Optional : Default is already set to 0
      // Bind our texture in Texture Unit 0
      glActiveTexture(GL_TEXTURE0);
-     GetGLError();
+     OGL_GET_GL_ERROR();
      glBindTexture(GL_TEXTURE_2D, info.name);
-     GetGLError();
+     OGL_GET_GL_ERROR();
      GLint textureUniformLocation  = glGetUniformLocation(_programID, "tex");
-     GetGLError();
+     OGL_GET_GL_ERROR();
      // Set our "myTextureSampler" sampler to user Texture Unit 0
      glUniform1i(textureUniformLocation, 0);
-     GetGLError();
+     OGL_GET_GL_ERROR();
     
     //////////////////////////////////
     // Create Element Buffer Object //
@@ -2030,38 +2031,38 @@ void OGLExampleTexture4::init(const void* arg)
     };
     
     glGenBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                  sizeof(elements),
                  elements,
                  GL_STATIC_DRAW
                  );
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture4::renderForTime(const CVTimeStamp * outputTime)
 {
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 void OGLExampleTexture4::didUpdateWindowRect(NSRect rect)
@@ -2077,7 +2078,7 @@ OGLExampleTexture4::~OGLExampleTexture4()
     
     // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     glDisableVertexAttribArray(_positionAttrib);
     glDisableVertexAttribArray(_colorAttrib);
@@ -2085,30 +2086,30 @@ OGLExampleTexture4::~OGLExampleTexture4()
     
     // Delete EBO
     glDeleteBuffers(1, &_elementBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Unbind VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete shader program
     glDeleteProgram(_programID);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete Texture
     glDeleteTextures(1, &_textureBufferObjectName);
     
     // Unbind VAO
     glBindVertexArray(0);
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
-    GetGLError();
+    OGL_GET_GL_ERROR();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
