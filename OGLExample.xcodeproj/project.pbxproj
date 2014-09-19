@@ -20,10 +20,10 @@
 		7E2CFDB319B0C87B00B874B4 /* OGLExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFDB219B0C87B00B874B4 /* OGLExampleTests.m */; };
 		7E2CFDBE19B0C8A500B874B4 /* OGLExample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFDBC19B0C8A500B874B4 /* OGLExample.cpp */; };
 		7E2CFDC119B0C8B400B874B4 /* MyWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC019B0C8B400B874B4 /* MyWindow.mm */; };
-		7E2CFDC319B0C91200B874B4 /* OGLUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDC219B0C91200B874B4 /* OGLUIKit.framework */; };
 		7E2CFDC619B0C94B00B874B4 /* RedTriangle.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */; };
 		7E2CFDC719B0C94B00B874B4 /* RedTriangle.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */; };
 		7E2CFDCD19B0CB2100B874B4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */; };
+		7E465A4D19CC50BA00F8967B /* OGLUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */; };
 		7E9F05B419B4A3BD0032FB7D /* TriangleUniformColor.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B319B4A3BD0032FB7D /* TriangleUniformColor.fsh */; };
 		7E9F05B619B4A6EE0032FB7D /* TriangleDynColor.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B519B4A6EE0032FB7D /* TriangleDynColor.vsh */; };
 		7E9F05B819B4A6FB0032FB7D /* TriangleDynColor.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B719B4A6FB0032FB7D /* TriangleDynColor.fsh */; };
@@ -37,6 +37,7 @@
 		7E9F05D119B740C20032FB7D /* Texture2.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05D019B740C20032FB7D /* Texture2.vsh */; };
 		7E9F05D319B7431E0032FB7D /* Texture4.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05D219B7431E0032FB7D /* Texture4.vsh */; };
 		7E9F05D519B743270032FB7D /* Texture4.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05D419B743270032FB7D /* Texture4.fsh */; };
+		7EA7CE1519CC543600EA9ECB /* OGLUIKit.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,20 @@
 			remoteInfo = OGLExample;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7E4659C719CB3A1900F8967B /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7EA7CE1519CC543600EA9ECB /* OGLUIKit.framework in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7E2CFD8519B0C87B00B874B4 /* OGLExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGLExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,11 +88,11 @@
 		7E2CFDBD19B0C8A500B874B4 /* OGLExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGLExample.h; sourceTree = "<group>"; };
 		7E2CFDBF19B0C8B400B874B4 /* MyWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWindow.h; sourceTree = "<group>"; };
 		7E2CFDC019B0C8B400B874B4 /* MyWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyWindow.mm; sourceTree = "<group>"; };
-		7E2CFDC219B0C91200B874B4 /* OGLUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OGLUIKit.framework; path = ../../../../../Library/Frameworks/OGLUIKit.framework; sourceTree = "<group>"; };
 		7E2CFDC419B0C94B00B874B4 /* RedTriangle.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RedTriangle.vsh; sourceTree = "<group>"; };
 		7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RedTriangle.fsh; sourceTree = "<group>"; };
 		7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		7E2CFDCB19B0CB0C00B874B4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OGLUIKit.framework; path = ../../../../../Library/Frameworks/OGLUIKit.framework; sourceTree = SOURCE_ROOT; };
 		7E9F05B319B4A3BD0032FB7D /* TriangleUniformColor.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleUniformColor.fsh; sourceTree = "<group>"; };
 		7E9F05B519B4A6EE0032FB7D /* TriangleDynColor.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleDynColor.vsh; sourceTree = "<group>"; };
 		7E9F05B719B4A6FB0032FB7D /* TriangleDynColor.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleDynColor.fsh; sourceTree = "<group>"; };
@@ -99,9 +114,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E465A4D19CC50BA00F8967B /* OGLUIKit.framework in Frameworks */,
 				7E9F05BE19B5B8880032FB7D /* GLKit.framework in Frameworks */,
 				7E2CFDCD19B0CB2100B874B4 /* OpenGL.framework in Frameworks */,
-				7E2CFDC319B0C91200B874B4 /* OGLUIKit.framework in Frameworks */,
 				7E2CFD8919B0C87B00B874B4 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,10 +157,10 @@
 		7E2CFD8719B0C87B00B874B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */,
 				7E9F05BD19B5B8880032FB7D /* GLKit.framework */,
 				7E2CFDCB19B0CB0C00B874B4 /* CoreVideo.framework */,
 				7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */,
-				7E2CFDC219B0C91200B874B4 /* OGLUIKit.framework */,
 				7E2CFD8819B0C87B00B874B4 /* Cocoa.framework */,
 				7E2CFDA719B0C87B00B874B4 /* XCTest.framework */,
 				7E2CFD8A19B0C87B00B874B4 /* Other Frameworks */,
@@ -232,6 +247,7 @@
 				7E2CFD8119B0C87B00B874B4 /* Sources */,
 				7E2CFD8219B0C87B00B874B4 /* Frameworks */,
 				7E2CFD8319B0C87B00B874B4 /* Resources */,
+				7E4659C719CB3A1900F8967B /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -468,6 +484,7 @@
 		7E2CFDB719B0C87B00B874B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -486,6 +503,7 @@
 		7E2CFDB819B0C87B00B874B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (

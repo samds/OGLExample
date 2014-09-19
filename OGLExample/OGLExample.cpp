@@ -98,7 +98,7 @@ void OGLExampleTriangle::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
 
     vhs = nil;
@@ -249,7 +249,7 @@ void OGLExampleTriangle3::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleUniformColor"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -409,7 +409,7 @@ void OGLExampleTriangle2::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -563,7 +563,7 @@ void OGLExampleTriangle4::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -734,7 +734,7 @@ void OGLExampleSquare::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -901,7 +901,7 @@ void OGLExampleSquare2::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"TriangleDynColor"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -1200,7 +1200,7 @@ void OGLExampleTexture1::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture1"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -1440,7 +1440,7 @@ void OGLExampleTexture2::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture2"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -1694,7 +1694,7 @@ void OGLExampleTexture3::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture3"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
@@ -1951,7 +1951,7 @@ void OGLExampleTexture4::init(const void* arg)
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture4"
                                                     ofType:@"fsh"];
-    _programID = ogl::load_shaders(vhs.UTF8String,fhs.UTF8String);
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
     // Free memory
