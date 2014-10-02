@@ -9,7 +9,11 @@
 #import <Cocoa/Cocoa.h>
 #import <OGLUIKit/OGLUIKit.h>
 
+@interface MyOpenGLView : OpenGLDynamicView
+@end
+
 @interface MyWindow : NSWindow
-@property (weak) IBOutlet OpenGLDynamicView *openGLView;
+@property (weak) IBOutlet MyOpenGLView *openGLView;
 @property (weak) IBOutlet NSOutlineView *outlineView;
 @end
+

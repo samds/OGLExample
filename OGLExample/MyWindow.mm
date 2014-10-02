@@ -29,7 +29,7 @@
 
 @interface MyWindow () <NSOutlineViewDelegate,
                         NSOutlineViewDataSource,
-                        OpenGLDynamicViewDelegate>
+                        OpenGLContextDelegate>
 @property(strong,nonatomic) NSArray *dataSource;
 @property(strong,nonatomic) NSArray *dataSourceTexture;
 @property(assign,nonatomic) OGLExample *openGLForm;
@@ -308,6 +308,20 @@
                      );
 
     return proposedSelectionIndexes;
+}
+
+@end
+
+@implementation MyOpenGLView
+
+- (instancetype)initWithFrame:(NSRect)frameRect
+{
+    self = [super initWithFrame:frameRect
+                       delegate:(id)self.window];
+    if (self) {
+        
+    }
+    return self;
 }
 
 @end
