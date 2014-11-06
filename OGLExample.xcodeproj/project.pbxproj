@@ -12,7 +12,6 @@
 		7E2CFD9519B0C87B00B874B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9419B0C87B00B874B4 /* main.m */; };
 		7E2CFD9919B0C87B00B874B4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9719B0C87B00B874B4 /* Credits.rtf */; };
 		7E2CFD9C19B0C87B00B874B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9B19B0C87B00B874B4 /* AppDelegate.m */; };
-		7E2CFD9F19B0C87B00B874B4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9D19B0C87B00B874B4 /* MainMenu.xib */; };
 		7E2CFDA119B0C87B00B874B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDA019B0C87B00B874B4 /* Images.xcassets */; };
 		7E2CFDA819B0C87B00B874B4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDA719B0C87B00B874B4 /* XCTest.framework */; };
 		7E2CFDA919B0C87B00B874B4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFD8819B0C87B00B874B4 /* Cocoa.framework */; };
@@ -24,6 +23,7 @@
 		7E2CFDC719B0C94B00B874B4 /* RedTriangle.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFDC519B0C94B00B874B4 /* RedTriangle.fsh */; };
 		7E2CFDCD19B0CB2100B874B4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFDC919B0CA4700B874B4 /* OpenGL.framework */; };
 		7E465A4D19CC50BA00F8967B /* OGLUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */; };
+		7E6F9E501A01471C00408E30 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9D19B0C87B00B874B4 /* MainMenu.xib */; };
 		7E9F05B419B4A3BD0032FB7D /* TriangleUniformColor.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B319B4A3BD0032FB7D /* TriangleUniformColor.fsh */; };
 		7E9F05B619B4A6EE0032FB7D /* TriangleDynColor.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B519B4A6EE0032FB7D /* TriangleDynColor.vsh */; };
 		7E9F05B819B4A6FB0032FB7D /* TriangleDynColor.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05B719B4A6FB0032FB7D /* TriangleDynColor.fsh */; };
@@ -37,7 +37,7 @@
 		7E9F05D119B740C20032FB7D /* Texture2.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05D019B740C20032FB7D /* Texture2.vsh */; };
 		7E9F05D319B7431E0032FB7D /* Texture4.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05D219B7431E0032FB7D /* Texture4.vsh */; };
 		7E9F05D519B743270032FB7D /* Texture4.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 7E9F05D419B743270032FB7D /* Texture4.fsh */; };
-		7EA7CE1519CC543600EA9ECB /* OGLUIKit.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */; };
+		7EA7CE1519CC543600EA9ECB /* OGLUIKit.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 7E465A4C19CC50BA00F8967B /* OGLUIKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -282,7 +282,7 @@
 		7E2CFD7D19B0C87B00B874B4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = SDESANTIS;
 				TargetAttributes = {
 					7E2CFDA519B0C87B00B874B4 = {
@@ -326,12 +326,12 @@
 				7E9F05BC19B5AD9B0032FB7D /* Texture1.fsh in Resources */,
 				7E2CFD9919B0C87B00B874B4 /* Credits.rtf in Resources */,
 				7E9F05D319B7431E0032FB7D /* Texture4.vsh in Resources */,
-				7E2CFD9F19B0C87B00B874B4 /* MainMenu.xib in Resources */,
 				7E9F05B419B4A3BD0032FB7D /* TriangleUniformColor.fsh in Resources */,
 				7E9F05CF19B7017F0032FB7D /* Texture3.fsh in Resources */,
 				7E9F05CD19B6FE130032FB7D /* Texture1.vsh in Resources */,
 				7E9F05D119B740C20032FB7D /* Texture2.vsh in Resources */,
 				7E2CFDC619B0C94B00B874B4 /* RedTriangle.vsh in Resources */,
+				7E6F9E501A01471C00408E30 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +496,7 @@
 				GCC_PREFIX_HEADER = "OGLExample/OGLExample-Prefix.pch";
 				INFOPLIST_FILE = "OGLExample/OGLExample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -515,6 +516,7 @@
 				GCC_PREFIX_HEADER = "OGLExample/OGLExample-Prefix.pch";
 				INFOPLIST_FILE = "OGLExample/OGLExample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

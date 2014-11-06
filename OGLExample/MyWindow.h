@@ -9,11 +9,29 @@
 #import <Cocoa/Cocoa.h>
 #import <OGLUIKit/OGLUIKit.h>
 
-@interface MyOpenGLView : OpenGLDynamicView
+
+
+@interface Exhibit : NSObject
+@property BOOL initialised;
+//    GLhandleARB vertex_shader, fragment_shader, program_object;
+//    GLUquadric *quadric;
+//    BOOL gpuProcessingInit;
+//    BOOL gpuProcessing;
+@property(strong,nonatomic) NSValue *cppObj;
+
+- (void)initLazy;
+
+- (void)didUpdateWindowRect:(NSRect)rect;
+- (void)renderForTime:(const CVTimeStamp*)outputTime;
+
 @end
 
-@interface MyWindow : NSWindow
-@property (weak) IBOutlet MyOpenGLView *openGLView;
-@property (weak) IBOutlet NSOutlineView *outlineView;
+/* Exhibit base class */
+@interface UIController : NSObject {
+    IBOutlet NSTableView *table_view;
+    IBOutlet NSTextView  *text_view;
+    IBOutlet OpenGLDynamicView *openglview;
+    
+    NSArray *exhibits;
+}
 @end
-

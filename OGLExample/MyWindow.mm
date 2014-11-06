@@ -21,15 +21,19 @@
 #define BASIC_SQUARE            @"Square"
 #define BASIC_SQUARE_EBO        @"Square EBO"
 #define BASIC_SCISSOR           @"Scissor"
+#define BASIC_CIRCLE            @"Circle"
 
 #define TEXTURE_1               @"Texture Basic"
 #define TEXTURE_2               @"Texture Wrong"
 #define TEXTURE_3               @"Texture Corrected"
 #define TEXTURE_4               @"Texture GLKit"
 
+#if 0
+
 @interface MyWindow () <NSOutlineViewDelegate,
                         NSOutlineViewDataSource,
-                        OpenGLContextDelegate>
+                        OpenGLContextDelegate,
+                        NSSplitViewDelegate>
 @property(strong,nonatomic) NSArray *dataSource;
 @property(strong,nonatomic) NSArray *dataSourceTexture;
 @property(assign,nonatomic) OGLExample *openGLForm;
@@ -45,11 +49,11 @@
 - (void)awakeFromNib
 {
 //    NSLog(@"%s",__FUNCTION__);
-    [self.openGLView setViewDelegate:self];
+//    [self.openGLView setViewDelegate:self];
     
     // NSTableViewRowSizeStyleDefault should be used, unless the user has picked
     // an explicit size. In that case, it should be stored out and re-used.
-    [self.outlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
+//    [self.outlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
     
     // Expand all the root items; disable the expansion animation that
     // normally happens
@@ -81,7 +85,8 @@
                         BASIC_TRIANGLE_MLCOLOR,
                         BASIC_SQUARE,
                         BASIC_SQUARE_EBO,
-                        BASIC_SCISSOR];
+                        BASIC_SCISSOR,
+                        BASIC_CIRCLE];
         _dataSourceTexture = @[TEXTURE_1,
                                TEXTURE_2,
                                TEXTURE_3,
@@ -119,6 +124,18 @@
     if (_openGLForm!=NULL) {
         _openGLForm->didUpdateWindowRect(rect);
     }
+}
+
+#pragma mark - NSSPlitViewDelegate
+
+- (void)splitViewWillResizeSubviews:(NSNotification *)notification
+{
+    [self disableScreenUpdatesUntilFlush];
+}
+
+- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview
+{
+    return NO;
 }
 
 #pragma mark - NSOutlineViewDataSource
@@ -214,11 +231,6 @@
     return [_topLevelItems containsObject:item];
 }
 
-- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview
-{
-    return NO;
-}
-
 #pragma mark - NSOutlineViewDelegate
 
 - (NSIndexSet *)outlineView:(NSOutlineView *)outlineView
@@ -269,6 +281,9 @@
         // Pass the View size to our OpenGl shape
         [self didUpdateWindowRect:[self.openGLView bounds]];
     }
+    else if ([item isEqualToString:BASIC_CIRCLE]) {
+        _openGLForm = new OGLExampleCircle;
+    }
     
     if ([item isEqualToString:TEXTURE_2]) {
         _openGLForm = new OGLExampleTexture2;
@@ -312,6 +327,10 @@
 
 @end
 
+
+
+
+
 @implementation MyOpenGLView
 
 - (instancetype)initWithFrame:(NSRect)frameRect
@@ -322,6 +341,174 @@
         
     }
     return self;
+}
+
+@end
+#endif // #if 0
+
+
+@implementation Exhibit
+
+- (instancetype)init:(const void *)aPointer
+{
+    self = [super init];
+    if (self) {
+        _cppObj = [NSValue valueWithPointer:aPointer];
+        _initialised = NO;
+    }
+    return self;
+}
+
+- (void)initLazy
+{
+    _initialised = TRUE;
+    [self initialize];
+}
+
+- (NSString*)name
+{
+    return [NSString stringWithUTF8String:((OGLExample*)(_cppObj.pointerValue))->name().c_str()];
+}
+
+- (void)renderForTime:(const CVTimeStamp*)outputTime
+{
+    if (!_initialised) {
+        [self initLazy];
+    }
+    ((OGLExample*)(_cppObj.pointerValue))->renderForTime(outputTime);
+}
+
+- (void)didUpdateWindowRect:(NSRect)rect
+{
+    ((OGLExample*)(_cppObj.pointerValue))->didUpdateWindowRect(rect);
+}
+
+- (void)initialize
+{
+    ((OGLExample*)(_cppObj.pointerValue))->init(NULL);
+}
+
+- (void)dealloc
+{
+    delete ((OGLExample*)(_cppObj.pointerValue));
+}
+
+@end
+
+
+@interface UIController () <NSTableViewDataSource,NSTableViewDelegate,OpenGLContextDelegate>
+@property(strong,nonatomic) Exhibit* currentExhibit;
+@end
+
+#define NEW_EXHIBIT_OBJET_WITH_TYPE(A) [[Exhibit alloc] init:(new A())]
+
+@implementation UIController
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        /* This is the list of supported exhibits */
+        exhibits = [NSArray arrayWithObjects:
+                    [[Exhibit alloc] init:(new OGLExampleColor())],
+                    [[Exhibit alloc] init:(new OGLExampleTriangle())],
+                    [[Exhibit alloc] init:(new OGLExampleTriangle2())],
+                    [[Exhibit alloc] init:(new OGLExampleTriangle3())],
+                    [[Exhibit alloc] init:(new OGLExampleTriangle4())],
+                    NEW_EXHIBIT_OBJET_WITH_TYPE(OGLExampleSquare),
+                    NEW_EXHIBIT_OBJET_WITH_TYPE(OGLExampleSquare2),
+                    NEW_EXHIBIT_OBJET_WITH_TYPE(OGLExampleTexture1),
+                    NEW_EXHIBIT_OBJET_WITH_TYPE(OGLExampleTexture2),
+                    NEW_EXHIBIT_OBJET_WITH_TYPE(OGLExampleTexture3),
+                    NEW_EXHIBIT_OBJET_WITH_TYPE(OGLExampleTexture4),
+                    nil];
+
+    }
+    return self;
+}
+
+- (void) dealloc
+{
+    
+}
+
+- (void) awakeFromNib
+{
+    // Create OpenGLContext
+    [openglview createOpenGLContextWithDelegate:self];
+    
+    self.currentExhibit = [exhibits objectAtIndex: 0];
+    
+//    [openglview setExhibit: exhibit];
+//    [text_view  readRTFDFromFile: [exhibit descriptionFilename]];
+}
+
+#pragma mark - NSTableViewDelegate
+
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+    return [exhibits count];
+}
+
+-               (id)tableView:(NSTableView *)tableView
+    objectValueForTableColumn:(NSTableColumn *)tableColumn
+                          row:(NSInteger)row
+{
+    return [[exhibits objectAtIndex:row] name];
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+    NSInteger rowindex;
+    Exhibit  *exhibit;
+
+    /* Get the symbol that was selected */
+    rowindex = [table_view selectedRow];
+    if ((rowindex < 0) || (rowindex >= [exhibits count])) {
+        return;
+    }
+    exhibit = [exhibits objectAtIndex: rowindex];
+    
+    // the new exhibit object might erase previous config
+//    [_currentExhibit setInitialised:NO];
+    
+//
+//    [openglview setExhibit: exhibit];
+//    
+//    if ([exhibit descriptionFilename])
+//        [text_view readRTFDFromFile: [exhibit descriptionFilename]];
+//    else
+//        [text_view setString: @""];
+    
+    // Forward the view size in the new exhibit object
+    [exhibit didUpdateWindowRect:openglview.bounds];
+    
+    _currentExhibit = exhibit;
+}
+
+#pragma mark - OpenGL Delegate
+
+- (void)didCreateOpenGLContext:(id)userInfo
+{
+    
+}
+
+- (void)renderForTime:(const CVTimeStamp*)outputTime
+{
+    [_currentExhibit renderForTime:outputTime];
+}
+
+- (void)didUpdateWindowRect:(NSRect)rect
+{
+    NSLog(@"W=%f",rect.size.width);
+    [self.currentExhibit didUpdateWindowRect:rect];
+}
+
+- (void)windowWillClose:(NSNotification*)notification
+{
+    _currentExhibit = nil;
+    exhibits = nil;
 }
 
 @end

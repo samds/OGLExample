@@ -20,6 +20,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //OGLExample::~OGLExample() = default;
+std::string OGLExample::name()
+{
+    return "Il Mio Nome E Nessuno";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -45,12 +49,14 @@ void OGLExampleColor::init(const void* arg)
     glDisable(GL_SCISSOR_TEST);
     OGL_GET_GL_ERROR();
     
-    glClearColor(_r,_g,_b,_a);
-    OGL_GET_GL_ERROR();
+    this->setColor(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void OGLExampleColor::renderForTime(const CVTimeStamp * outputTime)
 {
+    glClearColor(_r,_g,_b,_a);
+    OGL_GET_GL_ERROR();
+    
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
 }
@@ -66,8 +72,11 @@ void OGLExampleColor::setColor(float r,float g,float b,float a)
     _g = g;
     _b = b;
     _a = a;
-    glClearColor(r,g,b,a);
-    OGL_GET_GL_ERROR();
+}
+
+std::string OGLExampleColor::name()
+{
+    return "Red background";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,8 +88,11 @@ void OGLExampleColor::setColor(float r,float g,float b,float a)
 
 void OGLExampleTriangle::init(const void* arg)
 {
+    // Create VAO
     glGenVertexArrays(1, &_vertexArrayObjectName);
     OGL_GET_GL_ERROR();
+    
+    // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
     OGL_GET_GL_ERROR();
     
@@ -91,40 +103,43 @@ void OGLExampleTriangle::init(const void* arg)
     glDisable(GL_DEPTH_TEST);
     OGL_GET_GL_ERROR();
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    OGL_GET_GL_ERROR();
-
     NSString *vhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"vsh"];
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
                                                     ofType:@"fsh"];
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
-
-    vhs = nil;
-    fhs = nil;
     
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
 }
 
+std::string OGLExampleTriangle::name()
+{
+    return "Triangle Red Basic";
+}
+
 void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
 {
+    // Bind VAO
     glBindVertexArray(_vertexArrayObjectName);
     OGL_GET_GL_ERROR();
     
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
     // Use our shader
     glUseProgram(_programID);
-    
+    OGL_GET_GL_ERROR();
+
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat vertex_data[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
     };
     
     ///////////////////
@@ -136,17 +151,23 @@ void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
     
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &vertexbuffer);
-    
+    OGL_GET_GL_ERROR();
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     GLsizeiptr size = sizeof(vertex_data);
     glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
-    
+    OGL_GET_GL_ERROR();
+
     // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(0);
+    // Specify the layout of the vertex data
+    glEnableVertexAttribArray(0); // 0 because we have the following line
+                                  // "layout(location = 0) in vec3 position;"
+                                  // in our shader program.
+    OGL_GET_GL_ERROR();
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(
                           0,                  // attribute 0. No particular
                                               // reason for 0, but must match
@@ -155,20 +176,23 @@ void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           0,                  // stride
-                          (void*)0            // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
+    OGL_GET_GL_ERROR();
+
     
-    /*
-     * Draw the triangle !
-     * Starting from vertex 0.
-     * 3 vertices total -> 1 triangle
-     */
+    // Draw the triangle ( 3 vertices ).
+    // Starting from vertex 0.
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    
+    OGL_GET_GL_ERROR();
+
+    // Disable Attrib
     glDisableVertexAttribArray(0);
-    
+    OGL_GET_GL_ERROR();
+
     // Delete buffer
     glDeleteBuffers(1, &vertexbuffer);
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
@@ -178,16 +202,12 @@ void OGLExampleTriangle::renderForTime(const CVTimeStamp * outputTime)
 void OGLExampleTriangle::didUpdateWindowRect(NSRect rect)
 {
     glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-}
-
-void OGLExampleTriangle::setColor(float r,float g,float b,float a)
-{
-    glClearColor(r,g,b,a);
     OGL_GET_GL_ERROR();
 }
 
 OGLExampleTriangle::~OGLExampleTriangle()
 {
+    // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
     OGL_GET_GL_ERROR();
 }
@@ -218,17 +238,20 @@ void OGLExampleTriangle3::init(const void* arg)
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat vertex_data[] = {
         -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
     };
     
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &_vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     GLsizeiptr size = sizeof(vertex_data);
     glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    OGL_GET_GL_ERROR();
 
     ///////////////////
     // Others        //
@@ -252,34 +275,39 @@ void OGLExampleTriangle3::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
     
-    // Use our shader
-    glUseProgram(_programID);
-    
     // Specify the layout of the vertex data
     _indexAttrib = glGetAttribLocation(_programID, "position");
+    OGL_GET_GL_ERROR();
+    glEnableVertexAttribArray(_indexAttrib);
+    OGL_GET_GL_ERROR();
     glVertexAttribPointer(
-                          _indexAttrib,       // attribute 0. No particular
-                                              // reason for 0, but must match
-                                              // the layout in the shader.
+                          _indexAttrib,       // index attribute
                           3,                  // size
                           GL_FLOAT,           // type
                           GL_FALSE,           // normalized?
                           0,                  // stride
-                          (void*)0            // array buffer offset
+                          OGL_BUFFER_OFFSET(0)// array buffer offset
                           );
-    
+    OGL_GET_GL_ERROR();
+
     // Set the color
     GLint uniColor = glGetUniformLocation(_programID, "triangleColor");
-    glUniform3f(uniColor, 0.2f, 1.0f, 0.5f);
-
+    OGL_GET_GL_ERROR();
+    
+    // Sets the vertices' color
+    // glUniform* point to the current program,
+    // that's why we need to call glUseProgram().
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+    glUniform3f(uniColor, 0.0f, 0.0f, 0.0f);
+    OGL_GET_GL_ERROR();
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
+    
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -291,19 +319,19 @@ void OGLExampleTriangle3::renderForTime(const CVTimeStamp * outputTime)
     glBindVertexArray(_vertexArrayObjectName);
     OGL_GET_GL_ERROR();
     
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
     OGL_GET_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
 
-    /*
-     * Draw the triangle !
-     * Starting from vertex 0.
-     * 3 vertices total -> 1 triangle
-     */
-    glEnableVertexAttribArray(_indexAttrib);
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+
+    // Draw the triangle ( 3 vertices ).
+    // Starting from vertex 0.
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(_indexAttrib);
+    OGL_GET_GL_ERROR();
 
     // Unbind VAO
     glBindVertexArray(0);
@@ -315,10 +343,9 @@ void OGLExampleTriangle3::didUpdateWindowRect(NSRect rect)
     glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 }
 
-void OGLExampleTriangle3::setColor(float r,float g,float b,float a)
+std::string OGLExampleTriangle3::name()
 {
-    glClearColor(r,g,b,a);
-    OGL_GET_GL_ERROR();
+    return "Triangle Uniform Color";
 }
 
 OGLExampleTriangle3::~OGLExampleTriangle3()
@@ -384,12 +411,15 @@ void OGLExampleTriangle2::init(const void* arg)
     
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &_vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     GLsizeiptr size = sizeof(vertex_data);
     glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
-    
+    OGL_GET_GL_ERROR();
+
     ///////////////////
     // Others        //
     ///////////////////
@@ -412,19 +442,19 @@ void OGLExampleTriangle2::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
     
     // Use our shader
     glUseProgram(_programID);
-    
+    OGL_GET_GL_ERROR();
+
     // Specify the layout of the vertex data
     _indexAttrib = glGetAttribLocation(_programID, "position");
+    assert(_indexAttrib!=-1);
+    OGL_GET_GL_ERROR();
+
     glVertexAttribPointer(
                           _indexAttrib,       // attribute index
                           3,                  // size
@@ -433,7 +463,12 @@ void OGLExampleTriangle2::init(const void* arg)
                           0,                  // stride
                           (void*)0            // array buffer offset
                           );
-    
+    OGL_GET_GL_ERROR();
+
+    // Enable attribute array
+    glEnableVertexAttribArray(_indexAttrib);
+    OGL_GET_GL_ERROR();
+
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -450,14 +485,15 @@ void OGLExampleTriangle2::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
-    /*
-     * Draw the triangle !
-     * Starting from vertex 0.
-     * 3 vertices total -> 1 triangle
-     */
-    glEnableVertexAttribArray(_indexAttrib);
+    // Use our shader
+    // The OpenGL program is a global state, and only one program can be active.
+    // So if you have more than one program, then you need to enable each of
+    // them every time you use them.
+    glUseProgram(_programID);
+    
+    // Draw the triangle ( 3 vertices ).
+    // Starting from vertex 0.
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(_indexAttrib);
     
     // Unbind VAO
     glBindVertexArray(0);
@@ -469,10 +505,9 @@ void OGLExampleTriangle2::didUpdateWindowRect(NSRect rect)
     glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 }
 
-void OGLExampleTriangle2::setColor(float r,float g,float b,float a)
+std::string OGLExampleTriangle2::name()
 {
-    glClearColor(r,g,b,a);
-    OGL_GET_GL_ERROR();
+    return "Triangle Red Optimized";
 }
 
 OGLExampleTriangle2::~OGLExampleTriangle2()
@@ -482,12 +517,12 @@ OGLExampleTriangle2::~OGLExampleTriangle2()
     ////////////////////////////////
     
     // Bind VAO
-    glBindVertexArray(_vertexArrayObjectName);
-    OGL_GET_GL_ERROR();
+//    glBindVertexArray(_vertexArrayObjectName);
+//    OGL_GET_GL_ERROR();
     
     // Unbind VBO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    OGL_GET_GL_ERROR();
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
@@ -497,9 +532,13 @@ OGLExampleTriangle2::~OGLExampleTriangle2()
     glDeleteProgram(_programID);
     OGL_GET_GL_ERROR();
     
+    // Disable Attribute
+//    glDisableVertexAttribArray(_indexAttrib);
+//    OGL_GET_GL_ERROR();
+    
     // Unbind VAO
-    glBindVertexArray(0);
-    OGL_GET_GL_ERROR();
+//    glBindVertexArray(0);
+//    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
@@ -538,11 +577,14 @@ void OGLExampleTriangle4::init(const void* arg)
 
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &_vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     GLsizeiptr size = sizeof(vertex_data);
     glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    OGL_GET_GL_ERROR();
     
     ///////////////////
     // Others        //
@@ -565,10 +607,6 @@ void OGLExampleTriangle4::init(const void* arg)
                                                     ofType:@"fsh"];
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
-    
-    // Free memory
-    vhs = nil;
-    fhs = nil;
     
     ////////////////////////////////
     // Draw into the back buffer  //
@@ -615,11 +653,12 @@ void OGLExampleTriangle4::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
-    /*
-     * Draw the triangle !
-     * Starting from vertex 0.
-     * 3 vertices total -> 1 triangle
-     */
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+
+    // Draw the triangle ( 3 vertices ).
+    // Starting from vertex 0.
     glDrawArrays(GL_TRIANGLES, 0, 3);
     OGL_GET_GL_ERROR();
     
@@ -633,10 +672,9 @@ void OGLExampleTriangle4::didUpdateWindowRect(NSRect rect)
     glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
 }
 
-void OGLExampleTriangle4::setColor(float r,float g,float b,float a)
+std::string OGLExampleTriangle4::name()
 {
-    glClearColor(r,g,b,a);
-    OGL_GET_GL_ERROR();
+    return "Triangle Dyn Color";
 }
 
 OGLExampleTriangle4::~OGLExampleTriangle4()
@@ -646,15 +684,15 @@ OGLExampleTriangle4::~OGLExampleTriangle4()
     ////////////////////////////////
     
     // Bind VAO
-    glBindVertexArray(_vertexArrayObjectName);
-    OGL_GET_GL_ERROR();
+//    glBindVertexArray(_vertexArrayObjectName);
+//    OGL_GET_GL_ERROR();
     
-    glDisableVertexAttribArray(_positionAttrib);
-    glDisableVertexAttribArray(_colorAttrib);
+//    glDisableVertexAttribArray(_positionAttrib);
+//    glDisableVertexAttribArray(_colorAttrib);
     
     // Unbind VBO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    OGL_GET_GL_ERROR();
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    OGL_GET_GL_ERROR();
     
     // Delete VBO
     glDeleteBuffers(1, &_vertexBufferObjectName);
@@ -665,8 +703,8 @@ OGLExampleTriangle4::~OGLExampleTriangle4()
     OGL_GET_GL_ERROR();
     
     // Unbind VAO
-    glBindVertexArray(0);
-    OGL_GET_GL_ERROR();
+//    glBindVertexArray(0);
+//    OGL_GET_GL_ERROR();
     
     // Delete VAO
     glDeleteVertexArrays(1, &_vertexArrayObjectName);
@@ -679,6 +717,11 @@ OGLExampleTriangle4::~OGLExampleTriangle4()
 ////////////////////////////////////////////////////////////////////////////////
 // OGLExampleSquare                                                           //
 ////////////////////////////////////////////////////////////////////////////////
+
+std::string OGLExampleSquare::name()
+{
+    return "Square Basic (6 vertices)";
+}
 
 void OGLExampleSquare::init(const void* arg)
 {
@@ -737,16 +780,9 @@ void OGLExampleSquare::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
-    
-    // Use our shader
-    glUseProgram(_programID);
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
@@ -786,13 +822,15 @@ void OGLExampleSquare::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
-    /*
-     * Draw the triangle !
-     * Starting from vertex 0.
-     * 3 vertices total -> 1 triangle
-     */
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
     
+    // Draw the square ( 2 triangles => 6 vertices ).
+    // Starting from vertex 0.
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    OGL_GET_GL_ERROR();
+
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -801,12 +839,6 @@ void OGLExampleSquare::renderForTime(const CVTimeStamp * outputTime)
 void OGLExampleSquare::didUpdateWindowRect(NSRect rect)
 {
     glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-}
-
-void OGLExampleSquare::setColor(float r,float g,float b,float a)
-{
-    glClearColor(r,g,b,a);
-    OGL_GET_GL_ERROR();
 }
 
 OGLExampleSquare::~OGLExampleSquare()
@@ -850,6 +882,11 @@ OGLExampleSquare::~OGLExampleSquare()
 // OGLExampleSquare2                                                          //
 ////////////////////////////////////////////////////////////////////////////////
 
+std::string OGLExampleSquare2::name()
+{
+    return "Square Optimized (4 vertices)";
+}
+
 void OGLExampleSquare2::init(const void* arg)
 {
     ///////////////////
@@ -876,12 +913,15 @@ void OGLExampleSquare2::init(const void* arg)
     
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &_vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     GLsizeiptr size = sizeof(vertex_data);
     glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
-    
+    OGL_GET_GL_ERROR();
+
     ///////////////////
     // Others        //
     ///////////////////
@@ -904,10 +944,6 @@ void OGLExampleSquare2::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     //////////////////////////////////
     // Create Element Buffer Object //
     //////////////////////////////////
@@ -928,9 +964,6 @@ void OGLExampleSquare2::init(const void* arg)
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
-    
-    // Use our shader
-    glUseProgram(_programID);
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
@@ -970,7 +1003,12 @@ void OGLExampleSquare2::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
-    // Draw the square ( 2 triangles )
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+
+    // Draw the square ( 2 triangles => 6 vertices ).
+    // Starting from vertex 0.
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     // Unbind VAO
@@ -981,12 +1019,6 @@ void OGLExampleSquare2::renderForTime(const CVTimeStamp * outputTime)
 void OGLExampleSquare2::didUpdateWindowRect(NSRect rect)
 {
     glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-}
-
-void OGLExampleSquare2::setColor(float r,float g,float b,float a)
-{
-    glClearColor(r,g,b,a);
-    OGL_GET_GL_ERROR();
 }
 
 OGLExampleSquare2::~OGLExampleSquare2()
@@ -1103,10 +1135,172 @@ void OGLExampleScissor::didUpdateWindowRect(NSRect rect)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleCircle                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * Function that handles the drawing of a circle using the triangle fan
+ * method. This will create a filled circle.
+ *
+ * Params:
+ *	x (GLFloat) - the x position of the center point of the circle
+ *	y (GLFloat) - the y position of the center point of the circle
+ *	radius (GLFloat) - the radius that the painted circle will have
+ */
+GLfloat* drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius){
+    GLfloat triangleAmount = 100.0f; //# of triangles used to draw circle
+    
+    //GLfloat radius = 0.8f; //radius
+    GLfloat twicePi = 2.0f * M_PI;
+    GLfloat *vertices = (GLfloat*)malloc(triangleAmount*3*sizeof(GLfloat));
+    if (vertices == NULL) {
+        abort();
+    }
+    
+    for(unsigned i = 0; i <= triangleAmount;i++) {
+        float theta = twicePi * float(i) / float(triangleAmount);//get the current angle
+        float cx = radius * cosf(theta);//calculate the x component
+        float cy = radius * sinf(theta);//calculate the y component
+        
+        vertices[3*i] = cx;//x + (radius * cos(i *  twicePi / triangleAmount));
+        vertices[3*i + 1] = cy;// y + (radius * sin(i * twicePi / triangleAmount));
+        vertices[3*i + 2] = 0.0f;
+    }
+    return vertices;
+}
+
+void OGLExampleCircle::init(const void* arg)
+{
+    glGenVertexArrays(1, &_vertexArrayObjectName);
+    OGL_GET_GL_ERROR();
+    glBindVertexArray(_vertexArrayObjectName);
+    OGL_GET_GL_ERROR();
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_DEPTH_TEST);
+    OGL_GET_GL_ERROR();
+    
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    OGL_GET_GL_ERROR();
+    
+    NSString *vhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
+                                                    ofType:@"vsh"];
+    NSString *fhs = [[NSBundle mainBundle] pathForResource:@"RedTriangle"
+                                                    ofType:@"fsh"];
+    _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
+    
+    vhs = nil;
+    fhs = nil;
+    
+    // Use our shader
+    glUseProgram(_programID);
+    
+    // An array of 3 vectors which represents 3 vertices
+//    static const GLfloat vertex_data[] = {
+//        -1.0f, -1.0f, 0.0f,
+//        1.0f, -1.0f, 0.0f,
+//        0.0f,  1.0f, 0.0f,
+//    };
+    GLfloat *vertex_data = drawFilledCircle(0,0,1);
+    
+    ///////////////////
+    // Draw triangle //
+    ///////////////////
+    
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &_vertexbufferObject);
+    
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexbufferObject);
+    
+    // Give our vertices to OpenGL.
+    GLsizeiptr size = sizeof(vertex_data);
+    glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
+    
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexbufferObject);
+    glVertexAttribPointer(
+                          0,                  // attribute 0. No particular
+                          // reason for 0, but must match
+                          // the layout in the shader.
+                          3,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          3*sizeof(GLfloat),                  // stride
+                          (void*)0            // array buffer offset
+                          );
+
+    // Unbind VAO
+    glBindVertexArray(0);
+    OGL_GET_GL_ERROR();
+}
+
+void OGLExampleCircle::renderForTime(const CVTimeStamp * outputTime)
+{
+    // Bind VAO
+    glBindVertexArray(_vertexArrayObjectName);
+    OGL_GET_GL_ERROR();
+    
+    glClear(GL_COLOR_BUFFER_BIT);
+    OGL_GET_GL_ERROR();
+    
+    glDrawArrays(GL_LINE_LOOP, 0, 20);
+    
+    // Unbind VAO
+    glBindVertexArray(0);
+    OGL_GET_GL_ERROR();
+}
+
+void OGLExampleCircle::didUpdateWindowRect(NSRect rect)
+{
+    glViewport(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
+void OGLExampleCircle::setColor(float r,float g,float b,float a)
+{
+    glClearColor(r,g,b,a);
+    OGL_GET_GL_ERROR();
+}
+
+OGLExampleCircle::~OGLExampleCircle()
+{
+    // Is it really usefull?
+    glDisableVertexAttribArray(0);
+
+    // Delete buffer
+    glDeleteBuffers(1, &_vertexbufferObject);
+    OGL_GET_GL_ERROR();
+
+    glDeleteVertexArrays(1, &_vertexArrayObjectName);
+    OGL_GET_GL_ERROR();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // OGLExampleTexture1                                                         //
 ////////////////////////////////////////////////////////////////////////////////
+
+std::string OGLExampleTexture1::name()
+{
+    return "Texture Basic";
+}
 
 void OGLExampleTexture1::init(const void* arg)
 {
@@ -1135,7 +1329,10 @@ void OGLExampleTexture1::init(const void* arg)
     // Create VBO    //
     ///////////////////
     
-    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    // Generate 3 buffers
+    // first : vertices
+    // Second : Texture Coordinate
+    // Third : EBO
     glGenBuffers(3, _vertexBufferObjectName);
     OGL_GET_GL_ERROR();
     
@@ -1203,17 +1400,9 @@ void OGLExampleTexture1::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////////////////
     // Specify the layout of the vertex data  //
     ////////////////////////////////////////////
-    
-    // Use our shader
-    glUseProgram(_programID);
-    OGL_GET_GL_ERROR();
     
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
     OGL_GET_GL_ERROR();
@@ -1330,6 +1519,10 @@ void OGLExampleTexture1::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+    
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
@@ -1388,6 +1581,11 @@ OGLExampleTexture1::~OGLExampleTexture1()
 // OGLExampleTexture2                                                         //
 ////////////////////////////////////////////////////////////////////////////////
 
+std::string OGLExampleTexture2::name()
+{
+    return "Texture Wrong";
+}
+
 void OGLExampleTexture2::init(const void* arg)
 {
     ///////////////////
@@ -1443,17 +1641,9 @@ void OGLExampleTexture2::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
-    
-    // Use our shader
-    glUseProgram(_programID);
-    OGL_GET_GL_ERROR();
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
@@ -1580,8 +1770,13 @@ void OGLExampleTexture2::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+    
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    OGL_GET_GL_ERROR();
 
     // Unbind VAO
     glBindVertexArray(0);
@@ -1642,6 +1837,11 @@ OGLExampleTexture2::~OGLExampleTexture2()
 // OGLExampleTexture3                                                         //
 ////////////////////////////////////////////////////////////////////////////////
 
+std::string OGLExampleTexture3::name()
+{
+    return "Texture";
+}
+
 void OGLExampleTexture3::init(const void* arg)
 {
     ///////////////////
@@ -1697,17 +1897,9 @@ void OGLExampleTexture3::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
-    
-    // Use our shader
-    glUseProgram(_programID);
-    OGL_GET_GL_ERROR();
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
@@ -1834,9 +2026,14 @@ void OGLExampleTexture3::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+    
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    
+    OGL_GET_GL_ERROR();
+
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -1899,6 +2096,11 @@ OGLExampleTexture3::~OGLExampleTexture3()
 // OGLExampleTexture4                                                         //
 ////////////////////////////////////////////////////////////////////////////////
 
+std::string OGLExampleTexture4::name()
+{
+    return "Texture Blend";
+}
+
 void OGLExampleTexture4::init(const void* arg)
 {
     ///////////////////
@@ -1926,12 +2128,15 @@ void OGLExampleTexture4::init(const void* arg)
     
     // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &_vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferObjectName);
+    OGL_GET_GL_ERROR();
     // Give our vertices to OpenGL.
     GLsizeiptr size = sizeof(vertex_data);
     glBufferData(GL_ARRAY_BUFFER, size, vertex_data, GL_STATIC_DRAW);
-    
+    OGL_GET_GL_ERROR();
+
     ///////////////////
     // Others        //
     ///////////////////
@@ -1954,16 +2159,9 @@ void OGLExampleTexture4::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
-    // Free memory
-    vhs = nil;
-    fhs = nil;
-    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
-    
-    // Use our shader
-    glUseProgram(_programID);
     
     // Specify the layout of the vertex data
     _positionAttrib = glGetAttribLocation(_programID, "inPosition");
@@ -2057,8 +2255,13 @@ void OGLExampleTexture4::renderForTime(const CVTimeStamp * outputTime)
     glClear(GL_COLOR_BUFFER_BIT);
     OGL_GET_GL_ERROR();
     
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);

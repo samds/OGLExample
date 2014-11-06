@@ -11,6 +11,8 @@
 
 #include <CoreVideo/CVBase.h>
 #include <Foundation/NSGeometry.h>
+#include <string>
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // OGLExample                                                                 //
@@ -27,6 +29,9 @@ public:
     virtual void init(const void *) = 0;
     virtual void renderForTime(const CVTimeStamp *) = 0;
     virtual void didUpdateWindowRect(NSRect) = 0;
+    
+    virtual std::string name();
+//    virtual std::string descriptionFilename() = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +48,8 @@ public:
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
     void setColor(float,float,float,float);
+    std::string name();
+
 private:
     float _r,_g,_b,_a;
 };
@@ -60,10 +67,31 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
+    std::string name();
+    
+private:
+    GLuint _programID;
+    GLuint _vertexArrayObjectName;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+// OGLExampleCircle                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
+class OGLExampleCircle : public OGLExample {
+public:
+    ~OGLExampleCircle();
+    
+    void init(const void *);
+    void renderForTime(const CVTimeStamp *);
+    void didUpdateWindowRect(NSRect);
     void setColor(float,float,float,float);
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
+    GLuint _vertexbufferObject;
 };
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +107,7 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
-    void setColor(float,float,float,float);
+    std::string name();
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName, _vertexBufferObjectName;
@@ -102,7 +130,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
-    void setColor(float,float,float,float);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName, _vertexBufferObjectName;
@@ -126,7 +155,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
-    void setColor(float,float,float,float);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName, _vertexBufferObjectName;
@@ -149,7 +179,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
-    void setColor(float,float,float,float);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName, _vertexBufferObjectName;
@@ -172,7 +203,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
-    void setColor(float,float,float,float);
+    std::string name();
+    
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
@@ -231,6 +263,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
@@ -257,6 +291,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
@@ -284,6 +320,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
@@ -315,6 +353,8 @@ public:
     void init(const void *);
     void renderForTime(const CVTimeStamp *);
     void didUpdateWindowRect(NSRect);
+    std::string name();
+
 private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
