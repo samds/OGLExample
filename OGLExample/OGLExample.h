@@ -269,7 +269,7 @@ private:
     GLuint _programID;
     GLuint _vertexArrayObjectName;
     GLuint _vertexBufferObjectName[3]; // 0 vertex and 1 texture coordinate,3EBO
-//    GLuint _textureBufferObjectName;
+    GLuint _textureBufferObjectName;
     GLuint _positionAttrib,_textureAttrib;
 };
 ////////////////////////////////////////////////////////////////////////////////

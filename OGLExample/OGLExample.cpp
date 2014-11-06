@@ -1400,6 +1400,10 @@ void OGLExampleTexture1::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+    
     ////////////////////////////////////////////
     // Specify the layout of the vertex data  //
     ////////////////////////////////////////////
@@ -1438,23 +1442,22 @@ void OGLExampleTexture1::init(const void* arg)
     ////////////////////////////////
     // Load Texture               //
     ////////////////////////////////
-/*
- The following seems set by default
+
+    // The following seems set by default
  
     // Get a handle for our "tex" uniform
     // Default is already 0
     GLint textureUniformLocation = glGetUniformLocation(_programID, "tex");
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glUniform1i(textureUniformLocation, 0);                 // Set our "tex" sampler to user Texture Unit 0
-    GetGLError();
+    OGL_GET_GL_ERROR();
     glActiveTexture(GL_TEXTURE0);                           // Bind our texture in Texture Unit 0
-    GetGLError();
+    OGL_GET_GL_ERROR();
     
     // Not needed?
     glGenTextures( 1, &_textureBufferObjectName );
     glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
-    GetGLError();
-*/
+    OGL_GET_GL_ERROR();
     
     // Specify MAG and MIN filter is mandatory
     // WRAP is optional
@@ -1485,6 +1488,12 @@ void OGLExampleTexture1::init(const void* arg)
                     GL_CLAMP_TO_EDGE
                     );
 
+    // Texture looks like
+    //     -----------------
+    //     | WHITE | GREEN |
+    //     -----------------
+    //     | GREEN | WHITE |
+    //     -----------------
     float pixels[] = {
         1.0f, 1.0f, 1.0f,  0.1f, 1.0f, 0.1f,
         0.1f, 1.0f, 0.1f,  1.0f, 1.0f, 1.0f,
@@ -1501,6 +1510,10 @@ void OGLExampleTexture1::init(const void* arg)
                  GL_FLOAT,
                  (const GLvoid*)image
                  );
+    OGL_GET_GL_ERROR();
+    
+    // Unbind current program
+    glUseProgram(0);
     OGL_GET_GL_ERROR();
     
     // Unbind VAO
@@ -1523,8 +1536,19 @@ void OGLExampleTexture1::renderForTime(const CVTimeStamp * outputTime)
     glUseProgram(_programID);
     OGL_GET_GL_ERROR();
     
+    // Use our texture
+    glActiveTexture(GL_TEXTURE0);
+    OGL_GET_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
+    OGL_GET_GL_ERROR();
+    
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    OGL_GET_GL_ERROR();
+
+    // Unbind current program
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
     
     // Unbind VAO
     glBindVertexArray(0);
@@ -1583,7 +1607,7 @@ OGLExampleTexture1::~OGLExampleTexture1()
 
 std::string OGLExampleTexture2::name()
 {
-    return "Texture Wrong";
+    return "Texture Bitmap Wrong";
 }
 
 void OGLExampleTexture2::init(const void* arg)
@@ -1639,6 +1663,10 @@ void OGLExampleTexture2::init(const void* arg)
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture2"
                                                     ofType:@"fsh"];
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
+    
+    // Use our shader
+    glUseProgram(_programID);
     OGL_GET_GL_ERROR();
     
     ////////////////////////////////
@@ -1718,8 +1746,8 @@ void OGLExampleTexture2::init(const void* arg)
                     );
     
     GLsizei width = 128, height = 128;
-    const char *path = [[[NSBundle mainBundle] pathForResource:@"sample"
-                                                       ofType:@"bmp"]
+    const char *path = [[[NSBundle mainBundle] pathForResource:@"sample2"
+                                                        ofType:@"bmp"]
                         UTF8String];
     unsigned char* image = readBMP(path);
     glTexImage2D(GL_TEXTURE_2D,
@@ -1753,6 +1781,10 @@ void OGLExampleTexture2::init(const void* arg)
                  GL_STATIC_DRAW
                  );
     OGL_GET_GL_ERROR();
+    
+    // Unbind current program
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
 
     // Unbind VAO
     glBindVertexArray(0);
@@ -1773,11 +1805,21 @@ void OGLExampleTexture2::renderForTime(const CVTimeStamp * outputTime)
     // Use our shader
     glUseProgram(_programID);
     OGL_GET_GL_ERROR();
+
+    // Use our texture
+    glActiveTexture(GL_TEXTURE0);
+    OGL_GET_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
+    OGL_GET_GL_ERROR();
     
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     OGL_GET_GL_ERROR();
 
+    // Unbind current program
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
+    
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -1839,7 +1881,7 @@ OGLExampleTexture2::~OGLExampleTexture2()
 
 std::string OGLExampleTexture3::name()
 {
-    return "Texture";
+    return "Texture Bitmap Correct";
 }
 
 void OGLExampleTexture3::init(const void* arg)
@@ -1895,6 +1937,10 @@ void OGLExampleTexture3::init(const void* arg)
     NSString *fhs = [[NSBundle mainBundle] pathForResource:@"Texture3"
                                                     ofType:@"fsh"];
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
+    OGL_GET_GL_ERROR();
+    
+    // Use our shader
+    glUseProgram(_programID);
     OGL_GET_GL_ERROR();
     
     ////////////////////////////////
@@ -1974,7 +2020,7 @@ void OGLExampleTexture3::init(const void* arg)
                     );
     
     GLsizei width = 128, height = 128;
-    const char *path = [[[NSBundle mainBundle] pathForResource:@"sample"
+    const char *path = [[[NSBundle mainBundle] pathForResource:@"sample2"
                                                         ofType:@"bmp"]
                         UTF8String];
     unsigned char* image = readBMP(path);
@@ -2010,6 +2056,10 @@ void OGLExampleTexture3::init(const void* arg)
                  );
     OGL_GET_GL_ERROR();
     
+    // Unbind current program
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
+    
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -2030,10 +2080,20 @@ void OGLExampleTexture3::renderForTime(const CVTimeStamp * outputTime)
     glUseProgram(_programID);
     OGL_GET_GL_ERROR();
     
+    // Use our texture
+    glActiveTexture(GL_TEXTURE0);
+    OGL_GET_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
+    OGL_GET_GL_ERROR();
+    
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     OGL_GET_GL_ERROR();
 
+    // Unbind current program
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
+    
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -2159,6 +2219,10 @@ void OGLExampleTexture4::init(const void* arg)
     _programID = load_shaders(vhs.UTF8String,fhs.UTF8String);
     OGL_GET_GL_ERROR();
     
+    // Use our shader
+    glUseProgram(_programID);
+    OGL_GET_GL_ERROR();
+    
     ////////////////////////////////
     // Draw into the back buffer  //
     ////////////////////////////////
@@ -2199,7 +2263,7 @@ void OGLExampleTexture4::init(const void* arg)
     // Load Texture               //
     ////////////////////////////////
     
-     NSString *path = [[NSBundle mainBundle] pathForResource:@"sample"
+     NSString *path = [[NSBundle mainBundle] pathForResource:@"sample2"
                                                       ofType:@"bmp"];
      NSDictionary *options = @{GLKTextureLoaderOriginBottomLeft:@NO};
      GLKTextureInfo* info =
@@ -2209,14 +2273,14 @@ void OGLExampleTexture4::init(const void* arg)
      
      // Optional : Default is already set to 0
      // Bind our texture in Texture Unit 0
-     glActiveTexture(GL_TEXTURE0);
+     glActiveTexture(GL_TEXTURE10);
      OGL_GET_GL_ERROR();
      glBindTexture(GL_TEXTURE_2D, info.name);
      OGL_GET_GL_ERROR();
      GLint textureUniformLocation  = glGetUniformLocation(_programID, "tex");
      OGL_GET_GL_ERROR();
      // Set our "myTextureSampler" sampler to user Texture Unit 0
-     glUniform1i(textureUniformLocation, 0);
+     glUniform1i(textureUniformLocation, 10);
      OGL_GET_GL_ERROR();
     
     //////////////////////////////////
@@ -2239,6 +2303,10 @@ void OGLExampleTexture4::init(const void* arg)
                  );
     OGL_GET_GL_ERROR();
     
+    // Unbind current program
+    glUseProgram(0);
+    OGL_GET_GL_ERROR();
+    
     // Unbind VAO
     glBindVertexArray(0);
     OGL_GET_GL_ERROR();
@@ -2259,8 +2327,18 @@ void OGLExampleTexture4::renderForTime(const CVTimeStamp * outputTime)
     glUseProgram(_programID);
     OGL_GET_GL_ERROR();
 
+    // Use our texture
+    glActiveTexture(GL_TEXTURE0);
+    OGL_GET_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, _textureBufferObjectName);
+    OGL_GET_GL_ERROR();
+    
     // Draw the square ( 2 triangles )
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    OGL_GET_GL_ERROR();
+    
+    // Unbind current program
+    glUseProgram(0);
     OGL_GET_GL_ERROR();
     
     // Unbind VAO

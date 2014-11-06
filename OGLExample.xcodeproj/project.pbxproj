@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E08D8031A0BB652004B7404 /* sample2.bmp in Resources */ = {isa = PBXBuildFile; fileRef = 7E08D8021A0BB652004B7404 /* sample2.bmp */; };
 		7E2CFD8919B0C87B00B874B4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2CFD8819B0C87B00B874B4 /* Cocoa.framework */; };
 		7E2CFD9319B0C87B00B874B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9119B0C87B00B874B4 /* InfoPlist.strings */; };
 		7E2CFD9519B0C87B00B874B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E2CFD9419B0C87B00B874B4 /* main.m */; };
@@ -65,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7E08D8021A0BB652004B7404 /* sample2.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = sample2.bmp; sourceTree = "<group>"; };
 		7E2CFD8519B0C87B00B874B4 /* OGLExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OGLExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E2CFD8819B0C87B00B874B4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		7E2CFD8B19B0C87B00B874B4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -138,6 +140,7 @@
 			children = (
 				7E9F05BF19B5FAC40032FB7D /* LoadBitmap.h */,
 				7E9F05C819B6246E0032FB7D /* sample.bmp */,
+				7E08D8021A0BB652004B7404 /* sample2.bmp */,
 				7E2CFD8E19B0C87B00B874B4 /* OGLExample */,
 				7E2CFDAC19B0C87B00B874B4 /* OGLExampleTests */,
 				7E2CFD8719B0C87B00B874B4 /* Frameworks */,
@@ -324,6 +327,7 @@
 				7E9F05B819B4A6FB0032FB7D /* TriangleDynColor.fsh in Resources */,
 				7E9F05BA19B5AD8B0032FB7D /* Texture3.vsh in Resources */,
 				7E9F05BC19B5AD9B0032FB7D /* Texture1.fsh in Resources */,
+				7E08D8031A0BB652004B7404 /* sample2.bmp in Resources */,
 				7E2CFD9919B0C87B00B874B4 /* Credits.rtf in Resources */,
 				7E9F05D319B7431E0032FB7D /* Texture4.vsh in Resources */,
 				7E9F05B419B4A3BD0032FB7D /* TriangleUniformColor.fsh in Resources */,
