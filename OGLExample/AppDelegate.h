@@ -2,8 +2,8 @@
 //  AppDelegate.h
 //  OGLExample
 //
-//  Created by samuel de santis on 29/08/2014.
-//  Copyright (c) 2014 SDESANTIS. All rights reserved.
+//  Created by samuel on 26/08/2014.
+//  Copyright (c) 2014 SDS. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
